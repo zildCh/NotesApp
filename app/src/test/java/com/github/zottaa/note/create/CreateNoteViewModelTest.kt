@@ -1,11 +1,15 @@
 package com.github.zottaa.note.create
 
-import com.github.zottaa.note.CREATE_NOTE_REPOSITORY
-import com.github.zottaa.note.FakeAddNoteLiveDataWrapper
-import com.github.zottaa.note.FakeCreateNoteRepository
-import com.github.zottaa.note.FakeIncrementFolderLiveDataWrapper
-import com.github.zottaa.note.INCREMENT
-import com.github.zottaa.note.NOTE_LIVEDATA_ADD
+import com.github.zottaa.core.FakeClear
+import com.github.zottaa.core.FakeClear.Companion.CLEAR
+import com.github.zottaa.core.FakeNavigation
+import com.github.zottaa.core.FakeNavigation.Companion.NAVIGATE
+import com.github.zottaa.core.Order
+import com.github.zottaa.note.core.NotesRepository
+import com.github.zottaa.note.list.ListLiveDataWrapper
+import com.github.zottaa.note.list.NoteUi
+import com.github.zottaa.note.list.NotesListScreen
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import org.junit.Before
 import org.junit.Test
@@ -13,7 +17,6 @@ import org.junit.Test
 class CreateNoteViewModelTest {
 
     private lateinit var order: Order
-    private lateinit var incrementFolder: FakeIncrementFolderLiveDataWrapper
     private lateinit var repository: FakeCreateNoteRepository
     private lateinit var addLiveDataWrapper: FakeAddNoteLiveDataWrapper
     private lateinit var navigation: FakeNavigation.Update
@@ -27,9 +30,7 @@ class CreateNoteViewModelTest {
         addLiveDataWrapper = FakeAddNoteLiveDataWrapper.Base(order)
         navigation = FakeNavigation.Base(order)
         clear = FakeClear.Base(order)
-        incrementFolder = FakeIncrementFolderLiveDataWrapper.Base(order)
         viewModel = CreateNoteViewModel(
-            folderLiveDataWrapper = incrementFolder,
             addLiveDataWrapper = addLiveDataWrapper,
             repository = repository,
             navigation = navigation,
@@ -41,13 +42,13 @@ class CreateNoteViewModelTest {
 
     @Test
     fun test_create() {
-        viewModel.createNote(folderId = 4L, text = "new note text")
+        viewModel.createNote(title = "new note text")
 
-        repository.check(4L, "new note text")
+        repository.check("new note text", "")
         addLiveDataWrapper.check(NoteUi(id = 101, title = "new note text", text = ""))
         clear.check(listOf(CreateNoteViewModel::class.java))
         navigation.checkScreen(NotesListScreen)
-        order.check(listOf(CREATE_NOTE_REPOSITORY, INCREMENT, NOTE_LIVEDATA_ADD, CLEAR, NAVIGATE))
+        order.check(listOf(CREATE_NOTE_REPOSITORY, NOTE_LIVEDATA_ADD, CLEAR, NAVIGATE))
     }
 
     @Test
@@ -58,5 +59,50 @@ class CreateNoteViewModelTest {
         navigation.checkScreen(NotesListScreen)
         order.check(listOf(CLEAR, NAVIGATE))
     }
+}
 
+private const val NOTE_LIVEDATA_ADD = "NoteListLiveDataWrapper.Create#"
+private const val CREATE_NOTE_REPOSITORY = "NotesRepository.Create#createNote"
+
+private interface FakeAddNoteLiveDataWrapper : ListLiveDataWrapper.Create {
+
+    fun check(expected: NoteUi)
+
+    class Base(private val order: Order) : FakeAddNoteLiveDataWrapper {
+
+        private lateinit var actual: NoteUi
+
+        override fun check(expected: NoteUi) {
+            assertEquals(expected, actual)
+        }
+
+        override fun create(noteUi: NoteUi) {
+            actual = noteUi
+            order.add(NOTE_LIVEDATA_ADD)
+        }
+    }
+}
+
+private interface FakeCreateNoteRepository : NotesRepository.Create {
+
+    fun check(title: String, text: String)
+
+    class Base(private val order: Order, private var noteId: Long) : FakeCreateNoteRepository {
+
+        private var actualTitle = ""
+        private var actualText = ""
+
+
+        override fun check(title: String, text: String) {
+            assertEquals(title, actualTitle)
+            assertEquals(text, actualText)
+        }
+
+        override suspend fun createNote(title: String): Long {
+            actualTitle = title
+            actualText = ""
+            order.add(CREATE_NOTE_REPOSITORY)
+            return noteId++
+        }
+    }
 }

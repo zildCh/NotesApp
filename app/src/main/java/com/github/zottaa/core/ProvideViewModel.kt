@@ -3,6 +3,13 @@ package com.github.zottaa.core
 import androidx.lifecycle.ViewModel
 import com.github.zottaa.main.MainViewModel
 import com.github.zottaa.main.Navigation
+import com.github.zottaa.note.core.NoteLiveDataWrapper
+import com.github.zottaa.note.core.NotesRepository
+import com.github.zottaa.note.create.CreateNoteViewModel
+import com.github.zottaa.note.details.NoteDetailsViewModel
+import com.github.zottaa.note.list.ListLiveDataWrapper
+import com.github.zottaa.note.list.NoteListViewModel
+import kotlinx.coroutines.Dispatchers
 
 interface ProvideViewModel {
     fun <T : ViewModel> viewModel(clasz: Class<T>): T
@@ -36,7 +43,7 @@ interface ProvideViewModel {
 
         private val navigation = Navigation.Base()
         private val sharedNoteLiveDataWrapper = NoteLiveDataWrapper.Base()
-        private val sharedNoteListLiveDataWrapper = NoteListLiveDataWrapper.Base()
+        private val sharedNoteListLiveDataWrapper = ListLiveDataWrapper.Base()
         private val notesRepository = NotesRepository.Base(now, notesDao)
 
         override fun <T : ViewModel> viewModel(clasz: Class<T>): T {
@@ -45,8 +52,7 @@ interface ProvideViewModel {
                     navigation
                 )
 
-                EditNoteViewModel::class.java -> EditNoteViewModel(
-                    sharedFolderLiveDataWrapper,
+                NoteDetailsViewModel::class.java -> NoteDetailsViewModel(
                     sharedNoteLiveDataWrapper,
                     sharedNoteListLiveDataWrapper,
                     notesRepository,
@@ -56,8 +62,16 @@ interface ProvideViewModel {
                     Dispatchers.Main
                 )
 
+                NoteListViewModel::class.java -> NoteListViewModel(
+                    notesRepository,
+                    sharedNoteListLiveDataWrapper,
+                    sharedNoteLiveDataWrapper,
+                    navigation,
+                    Dispatchers.IO,
+                    Dispatchers.Main
+                )
+
                 CreateNoteViewModel::class.java -> CreateNoteViewModel(
-                    sharedFolderLiveDataWrapper,
                     sharedNoteListLiveDataWrapper,
                     notesRepository,
                     navigation,

@@ -1,5 +1,8 @@
 package com.github.zottaa.note.core
 
+import com.github.zottaa.core.NoteCache
+import com.github.zottaa.core.NotesDao
+import com.github.zottaa.core.Now
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -15,34 +18,25 @@ class NotesRepositoryTest {
             dao = dao
         )
 
-        repository.createNote(folderId = 1L, title = "first note")
-        repository.createNote(folderId = 1L, title = "second note")
-        repository.createNote(folderId = 2L, title = "third note")
-        repository.createNote(folderId = 2L, title = "forth note")
-        repository.createNote(folderId = 2L, title = "fifth note")
+        repository.createNote(title = "first note")
+        repository.createNote(title = "second note")
+        repository.createNote(title = "third note")
 
-        val notesFirstFolderInitialActual = repository.noteList(folderId = 1L)
-        val notesFirstFolderInitialExpected: List<MyNote> = listOf(
-            MyNote(id = 15L, title = "first note", text = ""),
-            MyNote(id = 16L, title = "second note", text = "")
+        val notesInitialActual = repository.notes()
+        val notesInitialExpected: List<Note> = listOf(
+            Note(id = 15L, title = "first note", text = ""),
+            Note(id = 16L, title = "second note", text = ""),
+            Note(id = 17L, title = "third note", text = ""),
         )
-        assertEquals(notesFirstFolderInitialExpected, notesFirstFolderInitialActual)
-        val notesSecondFolderInitialActual = repository.noteList(folderId = 2L)
-        val notesSecondFolderInitialExpected: List<MyNote> = listOf(
-            MyNote(id = 17L, title = "third note", text = ""),
-            MyNote(id = 18L, title = "forth note", text = ""),
-            MyNote(id = 19L, title = "fifth note", text = ""),
-        )
-        assertEquals(notesSecondFolderInitialExpected, notesSecondFolderInitialActual)
+        assertEquals(notesInitialExpected, notesInitialActual)
 
         repository.deleteNote(15L)
-        repository.deleteNote(18L)
 
         repository.updateNote(16L, "new name for 2", "new text)))")
-        repository.updateNote(19L, "new name for last one", "new text))")
+        repository.updateNote(17L, "new name for last one", "new text))")
 
-        val expectedNote = MyNote(id = 19L, title = "new name for last one", text = "new text))")
-        val actualNote: MyNote = repository.note(noteId = 19L)
+        val expectedNote = Note(id = 17L, title = "new name for last one", text = "new text))")
+        val actualNote: Note = repository.note(noteId = 17L)
         assertEquals(expectedNote, actualNote)
     }
 }
@@ -54,7 +48,7 @@ interface FakeNotesDao : NotesDao {
         private val set = HashSet<NoteCache>()
 
         override suspend fun notes(): List<NoteCache> {
-            return set
+            return set.toList()
         }
 
         override suspend fun note(noteId: Long): NoteCache {
@@ -75,5 +69,15 @@ interface FakeNotesDao : NotesDao {
         }
 
         private var deleteCalledWithFolderId: Long = -1
+    }
+}
+
+interface FakeNow : Now {
+
+    class Base(private var time: Long) : FakeNow {
+
+        override fun timeInMillis(): Long {
+            return time++
+        }
     }
 }

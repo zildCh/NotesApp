@@ -1,9 +1,10 @@
 package com.github.zottaa.main
 
+import com.github.zottaa.core.FakeNavigation
+import com.github.zottaa.core.Order
+import com.github.zottaa.note.list.NotesListScreen
 import org.junit.Test
-import ru.easycode.zerotoheroandroidtdd.core.FakeNavigation
-import ru.easycode.zerotoheroandroidtdd.core.Order
-import ru.easycode.zerotoheroandroidtdd.folder.list.FoldersListScreen
+
 
 class MainViewModelTest {
 

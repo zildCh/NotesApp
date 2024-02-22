@@ -1,8 +1,8 @@
 package com.github.zottaa.core
 
 import androidx.lifecycle.LiveData
+import com.github.zottaa.main.Navigation
 import org.junit.Assert.assertEquals
-import ru.easycode.zerotoheroandroidtdd.main.Navigation
 
 interface FakeNavigation : Navigation.Mutable {
 

@@ -18,7 +18,6 @@ class App : Application(), ProvideViewModel {
             ProvideViewModel.Base(
                 clear,
                 core.notesDao(),
-                core.foldersDao()
             )
         )
         super.onCreate()

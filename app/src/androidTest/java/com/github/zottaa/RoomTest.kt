@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.zottaa.core.AppDataBase
+import com.github.zottaa.core.NoteCache
+import com.github.zottaa.core.NotesDao
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -25,7 +28,6 @@ class RoomTest {
             .allowMainThreadQueries()
             .build()
         notesDao = db.notesDao()
-        foldersDao = db.foldersDao()
     }
 
     @After

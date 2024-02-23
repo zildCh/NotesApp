@@ -1,5 +1,6 @@
 package com.github.zottaa.note.details
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.github.zottaa.core.ClearViewModels
 import com.github.zottaa.main.Navigation
@@ -23,7 +24,7 @@ class NoteDetailsViewModel(
     private val clear: ClearViewModels,
     private val dispatcher: CoroutineDispatcher,
     private val dispatcherMain: CoroutineDispatcher
-) : ViewModel() {
+) : ViewModel(), NoteLiveDataWrapper.Read {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     fun init(noteId: Long) {
@@ -35,7 +36,6 @@ class NoteDetailsViewModel(
         }
     }
 
-    // TODO: Maybe fix later
     fun deleteNote(noteId: Long) {
         viewModelScope.launch(dispatcher) {
             repository.deleteNote(noteId)
@@ -49,6 +49,7 @@ class NoteDetailsViewModel(
         viewModelScope.launch(dispatcher) {
             repository.updateNote(noteId, newTitle, newText)
             withContext(dispatcherMain) {
+                // FIXME: Maybe redundant
                 noteListLiveDataWrapper.update(noteId, newTitle, newText)
                 comeback()
             }
@@ -59,4 +60,6 @@ class NoteDetailsViewModel(
         clear.clear(this.javaClass)
         navigation.update(NotesListScreen)
     }
+
+    override fun liveData(): LiveData<NoteUi> = noteLiveDataWrapper.liveData()
 }

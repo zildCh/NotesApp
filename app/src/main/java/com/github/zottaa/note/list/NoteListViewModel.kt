@@ -39,7 +39,7 @@ class NoteListViewModel(
 
     fun noteDetails(noteUi: NoteUi) {
         noteLiveDataWrapper.update(noteUi)
-        navigation.update(NoteDetailsScreen)
+        navigation.update(noteUi.detailsScreen())
     }
 
     override fun liveData(): LiveData<List<NoteUi>> =

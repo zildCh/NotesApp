@@ -3,8 +3,15 @@ package com.github.zottaa.note.details
 import androidx.fragment.app.FragmentManager
 import com.github.zottaa.core.Screen
 
-object NoteDetailsScreen : Screen {
+data class NoteDetailsScreen(
+    private val noteId: Long
+) : Screen {
     override fun show(supportFragmentManager: FragmentManager, containerId: Int) {
-        TODO("Not yet implemented")
+        supportFragmentManager.beginTransaction()
+            .replace(
+                containerId,
+                NoteDetailsFragment(noteId)
+            )
+            .commit()
     }
 }

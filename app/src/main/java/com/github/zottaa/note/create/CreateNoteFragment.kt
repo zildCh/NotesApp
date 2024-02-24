@@ -31,6 +31,7 @@ class CreateNoteFragment : AbstractFragment<FragmentNoteCreateBinding>() {
         }
 
         binding.createNoteButton.setOnClickListener {
+            hideKeyboard()
             viewModel.createNote(binding.createNoteEditText.text.toString())
         }
     }

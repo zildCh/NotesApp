@@ -45,16 +45,16 @@ class NoteListViewModelTest {
     fun test_init() {
         repository.expectList(
             listOf(
-                Note(id = 1L, title = "first note", text = "First"),
-                Note(id = 2L, title = "second note", text = "Second"),
+                Note(id = 1L, title = "first note", text = "First", 1L),
+                Note(id = 2L, title = "second note", text = "Second", 2L),
             )
         )
 
         viewModel.init()
         liveDataWrapper.checkList(
             listOf(
-                NoteUi(id = 1L, title = "first note", text = "First"),
-                NoteUi(id = 2L, title = "second note", text = "Second"),
+                NoteUi(id = 1L, title = "first note", text = "First", 1L),
+                NoteUi(id = 2L, title = "second note", text = "Second", 2L),
             )
         )
         order.check(listOf(NOTES, UPDATE))
@@ -72,16 +72,16 @@ class NoteListViewModelTest {
     fun test_details() {
         repository.expectList(
             listOf(
-                Note(id = 1L, title = "first note", text = "First"),
-                Note(id = 2L, title = "second note", text = "Second"),
+                Note(id = 1L, title = "first note", text = "First", 1L),
+                Note(id = 2L, title = "second note", text = "Second", 2L),
             )
         )
 
         viewModel.init()
         liveDataWrapper.checkList(
             listOf(
-                NoteUi(id = 1L, title = "first note", text = "First"),
-                NoteUi(id = 2L, title = "second note", text = "Second"),
+                NoteUi(id = 1L, title = "first note", text = "First", 1L),
+                NoteUi(id = 2L, title = "second note", text = "Second", 2L),
             )
         )
         order.check(listOf(NOTES, UPDATE))
@@ -90,17 +90,19 @@ class NoteListViewModelTest {
             noteUi = NoteUi(
                 id = 1L,
                 title = "first note",
-                text = "First"
+                text = "First",
+                1L
             )
         )
         noteLiveDataWrapper.check(
             NoteUi(
                 id = 1L,
                 title = "first note",
-                text = "First"
+                text = "First",
+                1L
             )
         )
-        navigation.checkScreen(NoteDetailsScreen)
+        navigation.checkScreen(NoteDetailsScreen(1L))
         order.check(listOf(NOTES, UPDATE, UPDATE_NOTE_LIVEDATA, NAVIGATE))
     }
 }
@@ -127,10 +129,14 @@ private interface FakeLiveDataWrapper : ListLiveDataWrapper.Mutable {
             order.add(UPDATE)
         }
 
-        override fun update(noteId: Long, newTitle: String, newText: String) {
+        override fun update(noteId: Long, newTitle: String, newText: String, updateTime: Long) {
             val note = actual.find {
                 it.isIdTheSame(noteId)
             }
+        }
+
+        override fun delete(noteId: Long) {
+            throw IllegalStateException("Not used here")
         }
 
         override fun liveData(): LiveData<List<NoteUi>> {

@@ -6,6 +6,8 @@ import com.github.zottaa.core.FakeClear.Companion.CLEAR
 import com.github.zottaa.core.FakeNavigation
 import com.github.zottaa.core.FakeNavigation.Companion.NAVIGATE
 import com.github.zottaa.core.Order
+import com.github.zottaa.core.Screen
+import com.github.zottaa.note.core.FakeNow
 import com.github.zottaa.note.core.Note
 import com.github.zottaa.note.core.NoteLiveDataWrapper
 import com.github.zottaa.note.core.NotesRepository
@@ -27,6 +29,7 @@ class NoteDetailsViewModelTest {
     private lateinit var noteLiveDataWrapper: FakeNoteLiveDataWrapper
     private lateinit var noteListLiveDataWrapper: FakeNoteListLiveDataWrapper
     private lateinit var viewModel: NoteDetailsViewModel
+    private lateinit var now: FakeNow
 
     @Before
     fun setup() {
@@ -36,6 +39,7 @@ class NoteDetailsViewModelTest {
         navigation = FakeNavigation.Base(order)
         noteLiveDataWrapper = FakeNoteLiveDataWrapper.Base(order)
         noteListLiveDataWrapper = FakeNoteListLiveDataWrapper.Base(order)
+        now = FakeNow.Base(0)
         viewModel = NoteDetailsViewModel(
             noteLiveDataWrapper = noteLiveDataWrapper,
             noteListLiveDataWrapper = noteListLiveDataWrapper,
@@ -43,7 +47,8 @@ class NoteDetailsViewModelTest {
             navigation = navigation,
             clear = clear,
             dispatcher = Dispatchers.Unconfined,
-            dispatcherMain = Dispatchers.Unconfined
+            dispatcherMain = Dispatchers.Unconfined,
+            now
         )
     }
 
@@ -52,7 +57,7 @@ class NoteDetailsViewModelTest {
         viewModel.init(noteId = 32L)
 
         repository.checkNote(32L)
-        noteLiveDataWrapper.check(NoteUi(32L, "first note", "First"))
+        noteLiveDataWrapper.check(NoteUi(32L, "first note", "First", 32L))
         order.check(listOf(REPOSITORY_NOTE, NOTE_LIVE_DATA))
     }
 
@@ -62,7 +67,7 @@ class NoteDetailsViewModelTest {
 
         repository.checkDelete(32L)
         clear.check(listOf(NoteDetailsViewModel::class.java))
-        navigation.checkScreen(NotesListScreen)
+        navigation.checkScreen(Screen.Pop)
         order.check(listOf(REPOSITORY_DELETE, CLEAR, NAVIGATE))
     }
 
@@ -73,7 +78,7 @@ class NoteDetailsViewModelTest {
         repository.checkUpdate(33L, "a new title", "a new text")
         noteListLiveDataWrapper.check(33L, "a new title", "a new text")
         clear.check(listOf(NoteDetailsViewModel::class.java))
-        navigation.checkScreen(NotesListScreen)
+        navigation.checkScreen(Screen.Pop)
         order.check(listOf(REPOSITORY_UPDATE, NOTES_LIVE_DATA_UPDATE, CLEAR, NAVIGATE))
     }
 
@@ -82,7 +87,7 @@ class NoteDetailsViewModelTest {
         viewModel.comeback()
 
         clear.check(listOf(NoteDetailsViewModel::class.java))
-        navigation.checkScreen(NotesListScreen)
+        navigation.checkScreen(Screen.Pop)
         order.check(listOf(CLEAR, NAVIGATE))
     }
 }
@@ -99,7 +104,7 @@ private interface FakeNoteLiveDataWrapper : NoteLiveDataWrapper.Mutable {
 
     class Base(private val order: Order) : FakeNoteLiveDataWrapper {
 
-        private var actual = NoteUi(0, "", "")
+        private var actual = NoteUi(0, "", "", 0)
 
         override fun check(expected: NoteUi) {
             assertEquals(expected, actual)
@@ -165,12 +170,12 @@ private interface FakeEditNoteRepository : NotesRepository.Edit {
         override suspend fun note(noteId: Long): Note {
             actualId = noteId
             order.add(REPOSITORY_NOTE)
-            return Note(id = noteId, title = "first note", text = "First")
+            return Note(id = noteId, title = "first note", text = "First", updateTime = noteId)
         }
     }
 }
 
-private interface FakeNoteListLiveDataWrapper : ListLiveDataWrapper.Update {
+private interface FakeNoteListLiveDataWrapper : ListLiveDataWrapper.Edit {
 
     fun check(expectedNoteId: Long, expectedNewTitle: String, expectedNewText: String)
 
@@ -190,11 +195,14 @@ private interface FakeNoteListLiveDataWrapper : ListLiveDataWrapper.Update {
             assertEquals(expectedNewText, actualText)
         }
 
-        override fun update(noteId: Long, newTitle: String, newText: String) {
+        override fun update(noteId: Long, newTitle: String, newText: String, updateTime: Long) {
             actualId = noteId
             actualTitle = newTitle
             actualText = newText
             order.add(NOTES_LIVE_DATA_UPDATE)
+        }
+
+        override fun delete(noteId: Long) {
 
         }
     }

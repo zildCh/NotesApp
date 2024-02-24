@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    style="@style/Base.Theme.NotesApp"
     android:layout_height="match_parent">
 
     <TextView

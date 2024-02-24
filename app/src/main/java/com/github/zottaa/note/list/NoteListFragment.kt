@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.github.zottaa.core.AbstractFragment
 import com.github.zottaa.core.ProvideViewModel
 import com.github.zottaa.databinding.FragmentNoteListBinding
@@ -22,6 +23,12 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
             }
         })
         binding.notesRecyclerView.adapter = adapter
+        binding.notesRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                binding.notesRecyclerView.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         binding.addButton.setOnClickListener {
             viewModel.addNote()

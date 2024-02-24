@@ -28,12 +28,12 @@ interface NotesRepository {
     ) : All {
         override suspend fun createNote(title: String): Long {
             val id = now.timeInMillis()
-            dao.insert(NoteCache(id, title, ""))
+            dao.insert(NoteCache(id, title, "", now.timeInMillis()))
             return id
         }
 
         override suspend fun notes(): List<Note> =
-            dao.notes().map { Note(it.id, it.title, it.text) }
+            dao.notes().map { Note(it.id, it.title, it.text, it.updateTime) }
 
 
         override suspend fun deleteNote(id: Long) {
@@ -42,21 +42,22 @@ interface NotesRepository {
 
         override suspend fun updateNote(id: Long, title: String, text: String) {
             val note = dao.note(id)
-            val newNote = note.copy(title = title, text = text)
+            val newNote = note.copy(title = title, text = text, updateTime = now.timeInMillis())
             dao.insert(newNote)
         }
 
         override suspend fun note(noteId: Long): Note =
-            dao.note(noteId).let { Note(it.id, it.title, it.text) }
+            dao.note(noteId).let { Note(it.id, it.title, it.text, it.updateTime) }
     }
 }
 
 data class Note(
     private val id: Long,
     private val title: String,
-    private val text: String
+    private val text: String,
+    private val updateTime: Long
 ) {
     fun toUi() =
-        NoteUi(id, title, text)
+        NoteUi(id, title, text, updateTime)
 
 }

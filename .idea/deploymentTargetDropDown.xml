@@ -2,10 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="NotesAppTest">
+        <State />
+      </entry>
       <entry key="RoomTest">
         <State />
       </entry>
+      <entry key="addTwoNotes()">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="mainScenario()">
         <State />
       </entry>
     </value>

@@ -24,19 +24,19 @@ class NotesRepositoryTest {
 
         val notesInitialActual = repository.notes()
         val notesInitialExpected: List<Note> = listOf(
-            Note(id = 15L, title = "first note", text = ""),
-            Note(id = 16L, title = "second note", text = ""),
-            Note(id = 17L, title = "third note", text = ""),
+            Note(id = 17L, title = "second note", text = "", 18L),
+            Note(id = 19L, title = "third note", text = "", 20L),
+            Note(id = 15L, title = "first note", text = "", 16L),
         )
         assertEquals(notesInitialExpected, notesInitialActual)
 
         repository.deleteNote(15L)
 
-        repository.updateNote(16L, "new name for 2", "new text)))")
-        repository.updateNote(17L, "new name for last one", "new text))")
+        repository.updateNote(17L, "new name for 2", "new text)))")
+        repository.updateNote(19L, "new name for last one", "new text))")
 
-        val expectedNote = Note(id = 17L, title = "new name for last one", text = "new text))")
-        val actualNote: Note = repository.note(noteId = 17L)
+        val expectedNote = Note(id = 19L, title = "new name for last one", text = "new text))", 22L)
+        val actualNote: Note = repository.note(noteId = 19L)
         assertEquals(expectedNote, actualNote)
     }
 }

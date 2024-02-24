@@ -3,6 +3,8 @@ package com.github.zottaa.note.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.github.zottaa.core.ClearViewModels
+import com.github.zottaa.core.Now
+import com.github.zottaa.core.Screen
 import com.github.zottaa.main.Navigation
 import com.github.zottaa.note.core.NoteLiveDataWrapper
 import com.github.zottaa.note.core.NotesRepository
@@ -18,12 +20,13 @@ import kotlinx.coroutines.withContext
 
 class NoteDetailsViewModel(
     private val noteLiveDataWrapper: NoteLiveDataWrapper.Mutable,
-    private val noteListLiveDataWrapper: ListLiveDataWrapper.Update,
+    private val noteListLiveDataWrapper: ListLiveDataWrapper.Edit,
     private val repository: NotesRepository.Edit,
     private val navigation: Navigation.Update,
     private val clear: ClearViewModels,
     private val dispatcher: CoroutineDispatcher,
-    private val dispatcherMain: CoroutineDispatcher
+    private val dispatcherMain: CoroutineDispatcher,
+    private val now: Now
 ) : ViewModel(), NoteLiveDataWrapper.Read {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -40,6 +43,7 @@ class NoteDetailsViewModel(
         viewModelScope.launch(dispatcher) {
             repository.deleteNote(noteId)
             withContext(dispatcherMain) {
+                noteListLiveDataWrapper.delete(noteId)
                 comeback()
             }
         }
@@ -49,8 +53,7 @@ class NoteDetailsViewModel(
         viewModelScope.launch(dispatcher) {
             repository.updateNote(noteId, newTitle, newText)
             withContext(dispatcherMain) {
-                // FIXME: Maybe redundant
-                noteListLiveDataWrapper.update(noteId, newTitle, newText)
+                noteListLiveDataWrapper.update(noteId, newTitle, newText, now.timeInMillis())
                 comeback()
             }
         }
@@ -58,7 +61,7 @@ class NoteDetailsViewModel(
 
     fun comeback() {
         clear.clear(this.javaClass)
-        navigation.update(NotesListScreen)
+        navigation.update(Screen.Pop)
     }
 
     override fun liveData(): LiveData<NoteUi> = noteLiveDataWrapper.liveData()

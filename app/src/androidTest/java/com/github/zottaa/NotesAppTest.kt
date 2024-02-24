@@ -22,7 +22,6 @@ class NotesAppTest {
         notesListPage.checkVisibleNow()
 
         notesListPage.clickAddButton()
-        notesListPage.checkNotVisibleNow()
         val createNotePage = CreateNotePage()
         createNotePage.checkVisibleNow()
 
@@ -38,7 +37,6 @@ class NotesAppTest {
 
         notesListPage.checkNote(position = 0, title = "first note", date = expectedDate)
         notesListPage.clickNoteAt(0)
-        notesListPage.checkNotVisibleNow()
 
         val notesDetailPage = EditNotePage()
         notesDetailPage.checkVisibleNow(title = "first note", text = "")
@@ -60,6 +58,39 @@ class NotesAppTest {
         notesDetailPage.checkNotVisibleNow()
 
         notesListPage.checkVisibleNow()
+    }
+
+    @Test
+    fun addTwoNotes() {
+        val notesListPage = NotesListPage()
+        notesListPage.checkVisibleNow()
+
+        notesListPage.clickAddButton()
+        val createNotePage = CreateNotePage()
+        createNotePage.checkVisibleNow()
+
+        createNotePage.inputNote(text = "first note")
+
+        val date = Date(Now.Base().timeInMillis())
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val expectedDate = format.format(date)
+
+        createNotePage.clickCreateButton()
+
+        createNotePage.checkNotVisibleNow()
+
+        notesListPage.checkNote(position = 0, title = "first note", date = expectedDate)
+
+        notesListPage.clickAddButton()
+        createNotePage.checkVisibleNow()
+
+        createNotePage.inputNote(text = "second note")
+
+        createNotePage.clickCreateButton()
+
+        createNotePage.checkNotVisibleNow()
+
+        notesListPage.checkNote(position = 1, title = "second note", date = expectedDate)
     }
 
 

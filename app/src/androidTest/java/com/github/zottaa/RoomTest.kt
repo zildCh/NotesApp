@@ -38,20 +38,20 @@ class RoomTest {
 
     @Test
     fun test_notes() = runBlocking {
-        notesDao.insert(note = NoteCache(id = 1L, title = "first note", text = "Yeee"))
-        notesDao.insert(note = NoteCache(id = 2L, title = "second note", text = "Yeeee"))
-        notesDao.insert(note = NoteCache(id = 3L, title = "third note", text = "yeeeeeeee"))
-        notesDao.insert(note = NoteCache(id = 4L, title = "forth note", text = "yeeeeeeeeeee"))
-        notesDao.insert(note = NoteCache(id = 5L, title = "fifth note", text = "Yeeeeeeeeeeeeeee"))
+        notesDao.insert(note = NoteCache(id = 1L, title = "first note", text = "Yeee", 0))
+        notesDao.insert(note = NoteCache(id = 2L, title = "second note", text = "Yeeee", 0))
+        notesDao.insert(note = NoteCache(id = 3L, title = "third note", text = "yeeeeeeee", 0))
+        notesDao.insert(note = NoteCache(id = 4L, title = "forth note", text = "yeeeeeeeeeee", 0))
+        notesDao.insert(note = NoteCache(id = 5L, title = "fifth note", text = "Yeeeeeeeeeeeeeee", 0))
 
         notesDao.delete(noteId = 1L)
         notesDao.delete(noteId = 4L)
 
-        notesDao.insert(note = NoteCache(id = 2L, title = "new name for note 2", text = "dasdasdadadad"))
-        notesDao.insert(note = NoteCache(id = 5L, title = "new name for note 5", text = "dasdadadasd"))
+        notesDao.insert(note = NoteCache(id = 2L, title = "new name for note 2", text = "dasdasdadadad", 0))
+        notesDao.insert(note = NoteCache(id = 5L, title = "new name for note 5", text = "dasdadadasd", 0))
 
-        val expectedRenamedOne = NoteCache(id = 2L, title = "new name for note 2", text = "dasdasdadadad")
-        val expectedRenamedTwo = NoteCache(id = 5L, title = "new name for note 5", text = "dasdadadasd")
+        val expectedRenamedOne = NoteCache(id = 2L, title = "new name for note 2", text = "dasdasdadadad", 0)
+        val expectedRenamedTwo = NoteCache(id = 5L, title = "new name for note 5", text = "dasdadadasd", 0)
 
         val actualRenamedOne = notesDao.note(noteId = 2L)
         val actualRenamedTwo = notesDao.note(noteId = 5L)

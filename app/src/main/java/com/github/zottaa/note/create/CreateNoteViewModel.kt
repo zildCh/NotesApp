@@ -2,6 +2,8 @@ package com.github.zottaa.note.create
 
 import androidx.lifecycle.ViewModel
 import com.github.zottaa.core.ClearViewModels
+import com.github.zottaa.core.Now
+import com.github.zottaa.core.Screen
 import com.github.zottaa.main.Navigation
 import com.github.zottaa.note.core.NotesRepository
 import com.github.zottaa.note.list.ListLiveDataWrapper
@@ -20,14 +22,15 @@ class CreateNoteViewModel(
     private val navigation: Navigation.Update,
     private val clear: ClearViewModels,
     private val dispatcher: CoroutineDispatcher,
-    private val dispatcherMain: CoroutineDispatcher
+    private val dispatcherMain: CoroutineDispatcher,
+    private val now: Now
 ) : ViewModel() {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     fun createNote(title: String) {
         viewModelScope.launch(dispatcher) {
             val id = repository.createNote(title)
             withContext(dispatcherMain) {
-                addLiveDataWrapper.create(NoteUi(id, title, DEFAULT_TEXT))
+                addLiveDataWrapper.create(NoteUi(id, title, DEFAULT_TEXT, now.timeInMillis()))
                 comeback()
             }
         }
@@ -35,7 +38,7 @@ class CreateNoteViewModel(
 
     fun comeback() {
         clear.clear(this::class.java)
-        navigation.update(NotesListScreen)
+        navigation.update(Screen.Pop)
     }
 
     companion object {

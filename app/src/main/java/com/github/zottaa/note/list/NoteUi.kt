@@ -8,7 +8,8 @@ import java.util.Date
 data class NoteUi(
     private val id: Long,
     private val title: String,
-    private val text: String
+    private val text: String,
+    private val updateTime: Long
 ) {
     fun isIdTheSame(id: Long) = id == this.id
 
@@ -19,7 +20,7 @@ data class NoteUi(
     }
 
     fun showDate(textView: TextView) {
-        val date = Date(id)
+        val date = Date(updateTime)
         val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
         textView.text = format.format(date)
     }

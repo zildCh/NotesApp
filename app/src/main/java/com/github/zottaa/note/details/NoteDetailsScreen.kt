@@ -8,10 +8,11 @@ data class NoteDetailsScreen(
 ) : Screen {
     override fun show(supportFragmentManager: FragmentManager, containerId: Int) {
         supportFragmentManager.beginTransaction()
-            .replace(
+            .add(
                 containerId,
                 NoteDetailsFragment(noteId)
             )
+            .addToBackStack(NoteDetailsFragment.Companion::class.java.name)
             .commit()
     }
 }

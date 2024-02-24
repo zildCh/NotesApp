@@ -14,6 +14,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.not
 
 class NotesListPage {
 
@@ -46,7 +47,7 @@ class NotesListPage {
     }
 
     fun checkNotVisibleNow() {
-        title().check(doesNotExist())
+        title().check(matches(not(isDisplayed())))
     }
 
     fun checkNote(position: Int, title: String, date: String) {

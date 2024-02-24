@@ -5,6 +5,8 @@ import com.github.zottaa.core.FakeClear.Companion.CLEAR
 import com.github.zottaa.core.FakeNavigation
 import com.github.zottaa.core.FakeNavigation.Companion.NAVIGATE
 import com.github.zottaa.core.Order
+import com.github.zottaa.core.Screen
+import com.github.zottaa.note.core.FakeNow
 import com.github.zottaa.note.core.NotesRepository
 import com.github.zottaa.note.list.ListLiveDataWrapper
 import com.github.zottaa.note.list.NoteUi
@@ -22,6 +24,7 @@ class CreateNoteViewModelTest {
     private lateinit var navigation: FakeNavigation.Update
     private lateinit var clear: FakeClear
     private lateinit var viewModel: CreateNoteViewModel
+    private lateinit var now: FakeNow
 
     @Before
     fun setup() {
@@ -30,13 +33,15 @@ class CreateNoteViewModelTest {
         addLiveDataWrapper = FakeAddNoteLiveDataWrapper.Base(order)
         navigation = FakeNavigation.Base(order)
         clear = FakeClear.Base(order)
+        now = FakeNow.Base(0)
         viewModel = CreateNoteViewModel(
             addLiveDataWrapper = addLiveDataWrapper,
             repository = repository,
             navigation = navigation,
             clear = clear,
             dispatcher = Dispatchers.Unconfined,
-            dispatcherMain = Dispatchers.Unconfined
+            dispatcherMain = Dispatchers.Unconfined,
+            now
         )
     }
 
@@ -45,9 +50,9 @@ class CreateNoteViewModelTest {
         viewModel.createNote(title = "new note text")
 
         repository.check("new note text", "")
-        addLiveDataWrapper.check(NoteUi(id = 101, title = "new note text", text = ""))
+        addLiveDataWrapper.check(NoteUi(id = 101, title = "new note text", text = "", 0))
         clear.check(listOf(CreateNoteViewModel::class.java))
-        navigation.checkScreen(NotesListScreen)
+        navigation.checkScreen(Screen.Pop)
         order.check(listOf(CREATE_NOTE_REPOSITORY, NOTE_LIVEDATA_ADD, CLEAR, NAVIGATE))
     }
 
@@ -56,7 +61,7 @@ class CreateNoteViewModelTest {
         viewModel.comeback()
 
         clear.check(listOf(CreateNoteViewModel::class.java))
-        navigation.checkScreen(NotesListScreen)
+        navigation.checkScreen(Screen.Pop)
         order.check(listOf(CLEAR, NAVIGATE))
     }
 }

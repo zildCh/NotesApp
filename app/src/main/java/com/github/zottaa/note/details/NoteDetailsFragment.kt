@@ -46,6 +46,7 @@ class NoteDetailsFragment(
         addSaveButtonListener(binding.noteTextEditText)
 
         binding.saveNoteButton.setOnClickListener {
+            hideKeyboard()
             viewModel.updateNote(
                 noteId,
                 binding.noteTitleEditText.text.toString(),
@@ -54,6 +55,7 @@ class NoteDetailsFragment(
         }
 
         binding.deleteNoteButton.setOnClickListener {
+            hideKeyboard()
             viewModel.deleteNote(noteId)
         }
 

@@ -59,7 +59,8 @@ interface ProvideViewModel {
                     navigation,
                     clear,
                     Dispatchers.IO,
-                    Dispatchers.Main
+                    Dispatchers.Main,
+                    now
                 )
 
                 NoteListViewModel::class.java -> NoteListViewModel(
@@ -77,7 +78,8 @@ interface ProvideViewModel {
                     navigation,
                     clear,
                     Dispatchers.IO,
-                    Dispatchers.Main
+                    Dispatchers.Main,
+                    now
                 )
 
                 else -> {

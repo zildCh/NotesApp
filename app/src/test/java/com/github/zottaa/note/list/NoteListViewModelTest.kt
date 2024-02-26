@@ -45,16 +45,16 @@ class NoteListViewModelTest {
     fun test_init() {
         repository.expectList(
             listOf(
-                Note(id = 1L, title = "first note", text = "First", 1L),
-                Note(id = 2L, title = "second note", text = "Second", 2L),
+                Note(id = 1L, title = "first note", text = "First", 1L, 0),
+                Note(id = 2L, title = "second note", text = "Second", 2L, 0),
             )
         )
 
         viewModel.init()
         liveDataWrapper.checkList(
             listOf(
-                NoteUi(id = 1L, title = "first note", text = "First", 1L),
-                NoteUi(id = 2L, title = "second note", text = "Second", 2L),
+                NoteUi(id = 1L, title = "first note", text = "First", 1L, 0),
+                NoteUi(id = 2L, title = "second note", text = "Second", 2L, 0),
             )
         )
         order.check(listOf(NOTES, UPDATE))
@@ -72,16 +72,16 @@ class NoteListViewModelTest {
     fun test_details() {
         repository.expectList(
             listOf(
-                Note(id = 1L, title = "first note", text = "First", 1L),
-                Note(id = 2L, title = "second note", text = "Second", 2L),
+                Note(id = 1L, title = "first note", text = "First", 1L, 0),
+                Note(id = 2L, title = "second note", text = "Second", 2L, 0),
             )
         )
 
         viewModel.init()
         liveDataWrapper.checkList(
             listOf(
-                NoteUi(id = 1L, title = "first note", text = "First", 1L),
-                NoteUi(id = 2L, title = "second note", text = "Second", 2L),
+                NoteUi(id = 1L, title = "first note", text = "First", 1L, 0),
+                NoteUi(id = 2L, title = "second note", text = "Second", 2L, 0),
             )
         )
         order.check(listOf(NOTES, UPDATE))
@@ -91,7 +91,8 @@ class NoteListViewModelTest {
                 id = 1L,
                 title = "first note",
                 text = "First",
-                1L
+                1L,
+                0
             )
         )
         noteLiveDataWrapper.check(
@@ -99,7 +100,8 @@ class NoteListViewModelTest {
                 id = 1L,
                 title = "first note",
                 text = "First",
-                1L
+                1L,
+                0
             )
         )
         navigation.checkScreen(NoteDetailsScreen(1L))

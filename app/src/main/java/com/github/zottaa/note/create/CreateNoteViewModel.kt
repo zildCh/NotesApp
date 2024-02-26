@@ -26,11 +26,11 @@ class CreateNoteViewModel(
     private val now: Now
 ) : ViewModel() {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    fun createNote(title: String) {
+    fun createNote(title: String, categoryId: Long) {
         viewModelScope.launch(dispatcher) {
-            val id = repository.createNote(title)
+            val id = repository.createNote(title, categoryId)
             withContext(dispatcherMain) {
-                addLiveDataWrapper.create(NoteUi(id, title, DEFAULT_TEXT, now.timeInMillis()))
+                addLiveDataWrapper.create(NoteUi(id, title, DEFAULT_TEXT, now.timeInMillis(), categoryId))
                 comeback()
             }
         }

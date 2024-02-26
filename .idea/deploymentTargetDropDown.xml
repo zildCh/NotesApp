@@ -2,10 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="NotesAppTest">
+      <entry key="RoomTest">
         <State />
       </entry>
-      <entry key="RoomTest">
+      <entry key="Tests in 'com.github.zottaa'">
         <State />
       </entry>
       <entry key="addTwoNotes()">

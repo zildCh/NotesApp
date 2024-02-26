@@ -51,7 +51,7 @@ class NoteDetailsViewModel(
 
     fun updateNote(noteId: Long, newTitle: String, newText: String) {
         viewModelScope.launch(dispatcher) {
-            repository.updateNote(noteId, newTitle, newText)
+            repository.updateNote(noteId, newTitle, newText, 0)
             withContext(dispatcherMain) {
                 noteListLiveDataWrapper.update(noteId, newTitle, newText, now.timeInMillis())
                 comeback()

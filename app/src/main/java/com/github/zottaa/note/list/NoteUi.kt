@@ -9,11 +9,14 @@ data class NoteUi(
     private val id: Long,
     private val title: String,
     private val text: String,
-    private val updateTime: Long
+    private val updateTime: Long,
+    private val categoryId: Long
 ) {
     fun isIdTheSame(id: Long) = id == this.id
 
     fun isIdTheSame(noteUi: NoteUi) = this.id == noteUi.id
+
+    fun isCategoryIdTheSame(id: Long) = this.categoryId == id
 
     fun showTitle(textView: TextView) {
         textView.text = title

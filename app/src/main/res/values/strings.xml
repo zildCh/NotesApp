@@ -7,4 +7,9 @@
     <string name="update_note">Update note</string>
     <string name="button_save">save</string>
     <string name="delete_button">delete</string>
+    <string name="category_work">Work</string>
+    <string name="category_study">Study</string>
+    <string name="category_personal">Personal</string>
+    <string name="category_sport">Sport</string>
+    <string name="category_family">Family</string>
 </resources>

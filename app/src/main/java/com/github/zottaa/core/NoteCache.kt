@@ -16,5 +16,7 @@ data class NoteCache(
     @ColumnInfo(name = "note_text")
     val text: String,
     @ColumnInfo(name = "note_update_date")
-    val updateTime: Long
+    val updateTime: Long,
+    @ColumnInfo(name = "category_id")
+    val categoryId: Long
 )

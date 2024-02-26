@@ -18,24 +18,24 @@ class NotesRepositoryTest {
             dao = dao
         )
 
-        repository.createNote(title = "first note")
-        repository.createNote(title = "second note")
-        repository.createNote(title = "third note")
+        repository.createNote(title = "first note", 0)
+        repository.createNote(title = "second note", 0)
+        repository.createNote(title = "third note", 0)
 
         val notesInitialActual = repository.notes()
         val notesInitialExpected: List<Note> = listOf(
-            Note(id = 17L, title = "second note", text = "", 18L),
-            Note(id = 19L, title = "third note", text = "", 20L),
-            Note(id = 15L, title = "first note", text = "", 16L),
+            Note(id = 19L, title = "third note", text = "", 20L, 0),
+            Note(id = 15L, title = "first note", text = "", 16L, 0),
+            Note(id = 17L, title = "second note", text = "", 18L, 0),
         )
         assertEquals(notesInitialExpected, notesInitialActual)
 
         repository.deleteNote(15L)
 
-        repository.updateNote(17L, "new name for 2", "new text)))")
-        repository.updateNote(19L, "new name for last one", "new text))")
+        repository.updateNote(17L, "new name for 2", "new text)))", 0)
+        repository.updateNote(19L, "new name for last one", "new text))", 0)
 
-        val expectedNote = Note(id = 19L, title = "new name for last one", text = "new text))", 22L)
+        val expectedNote = Note(id = 19L, title = "new name for last one", text = "new text))", 22L, 0)
         val actualNote: Note = repository.note(noteId = 19L)
         assertEquals(expectedNote, actualNote)
     }
@@ -66,6 +66,10 @@ interface FakeNotesDao : NotesDao {
             set.find { it.id == noteId }?.let {
                 set.remove(it)
             }
+        }
+
+        override suspend fun notesByCategory(categoryId: Long): List<NoteCache> {
+            TODO("Not yet implemented")
         }
 
         private var deleteCalledWithFolderId: Long = -1

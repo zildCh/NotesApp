@@ -57,7 +57,7 @@ class NoteDetailsViewModelTest {
         viewModel.init(noteId = 32L)
 
         repository.checkNote(32L)
-        noteLiveDataWrapper.check(NoteUi(32L, "first note", "First", 32L))
+        noteLiveDataWrapper.check(NoteUi(32L, "first note", "First", 32L, 0))
         order.check(listOf(REPOSITORY_NOTE, NOTE_LIVE_DATA))
     }
 
@@ -104,7 +104,7 @@ private interface FakeNoteLiveDataWrapper : NoteLiveDataWrapper.Mutable {
 
     class Base(private val order: Order) : FakeNoteLiveDataWrapper {
 
-        private var actual = NoteUi(0, "", "", 0)
+        private var actual = NoteUi(0, "", "", 0, 0)
 
         override fun check(expected: NoteUi) {
             assertEquals(expected, actual)
@@ -160,7 +160,7 @@ private interface FakeEditNoteRepository : NotesRepository.Edit {
             order.add(REPOSITORY_DELETE)
         }
 
-        override suspend fun updateNote(id: Long, title: String, text: String) {
+        override suspend fun updateNote(id: Long, title: String, text: String, categoryId: Long) {
             actualId = id
             actualName = title
             actualText = text
@@ -170,7 +170,7 @@ private interface FakeEditNoteRepository : NotesRepository.Edit {
         override suspend fun note(noteId: Long): Note {
             actualId = noteId
             order.add(REPOSITORY_NOTE)
-            return Note(id = noteId, title = "first note", text = "First", updateTime = noteId)
+            return Note(id = noteId, title = "first note", text = "First", updateTime = noteId, 0)
         }
     }
 }

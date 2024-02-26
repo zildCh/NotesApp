@@ -7,7 +7,7 @@ import com.github.zottaa.note.list.NoteUi
 
 interface NotesRepository {
     interface Create {
-        suspend fun createNote(title: String): Long
+        suspend fun createNote(title: String, categoryId: Long): Long
     }
 
     interface ReadList {
@@ -16,7 +16,7 @@ interface NotesRepository {
 
     interface Edit {
         suspend fun deleteNote(id: Long)
-        suspend fun updateNote(id: Long, title: String = "", text: String = "")
+        suspend fun updateNote(id: Long, title: String = "", text: String = "", categoryId: Long)
         suspend fun note(noteId: Long): Note
     }
 
@@ -26,28 +26,33 @@ interface NotesRepository {
         private val now: Now,
         private val dao: NotesDao
     ) : All {
-        override suspend fun createNote(title: String): Long {
+        override suspend fun createNote(title: String, categoryId: Long): Long {
             val id = now.timeInMillis()
-            dao.insert(NoteCache(id, title, "", now.timeInMillis()))
+            dao.insert(NoteCache(id, title, "", now.timeInMillis(), categoryId))
             return id
         }
 
         override suspend fun notes(): List<Note> =
-            dao.notes().map { Note(it.id, it.title, it.text, it.updateTime) }
+            dao.notes().map { Note(it.id, it.title, it.text, it.updateTime, it.categoryId) }
 
 
         override suspend fun deleteNote(id: Long) {
             dao.delete(id)
         }
 
-        override suspend fun updateNote(id: Long, title: String, text: String) {
+        override suspend fun updateNote(id: Long, title: String, text: String, categoryId: Long) {
             val note = dao.note(id)
-            val newNote = note.copy(title = title, text = text, updateTime = now.timeInMillis())
+            val newNote = note.copy(
+                title = title,
+                text = text,
+                updateTime = now.timeInMillis(),
+                categoryId = categoryId
+            )
             dao.insert(newNote)
         }
 
         override suspend fun note(noteId: Long): Note =
-            dao.note(noteId).let { Note(it.id, it.title, it.text, it.updateTime) }
+            dao.note(noteId).let { Note(it.id, it.title, it.text, it.updateTime, it.categoryId) }
     }
 }
 
@@ -55,9 +60,10 @@ data class Note(
     private val id: Long,
     private val title: String,
     private val text: String,
-    private val updateTime: Long
+    private val updateTime: Long,
+    private val categoryId: Long
 ) {
     fun toUi() =
-        NoteUi(id, title, text, updateTime)
+        NoteUi(id, title, text, updateTime, categoryId)
 
 }

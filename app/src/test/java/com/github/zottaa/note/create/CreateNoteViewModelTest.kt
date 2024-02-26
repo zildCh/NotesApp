@@ -47,10 +47,10 @@ class CreateNoteViewModelTest {
 
     @Test
     fun test_create() {
-        viewModel.createNote(title = "new note text")
+        viewModel.createNote(title = "new note text", 0)
 
         repository.check("new note text", "")
-        addLiveDataWrapper.check(NoteUi(id = 101, title = "new note text", text = "", 0))
+        addLiveDataWrapper.check(NoteUi(id = 101, title = "new note text", text = "", 0, 0))
         clear.check(listOf(CreateNoteViewModel::class.java))
         navigation.checkScreen(Screen.Pop)
         order.check(listOf(CREATE_NOTE_REPOSITORY, NOTE_LIVEDATA_ADD, CLEAR, NAVIGATE))
@@ -103,7 +103,7 @@ private interface FakeCreateNoteRepository : NotesRepository.Create {
             assertEquals(text, actualText)
         }
 
-        override suspend fun createNote(title: String): Long {
+        override suspend fun createNote(title: String, categoryId: Long): Long {
             actualTitle = title
             actualText = ""
             order.add(CREATE_NOTE_REPOSITORY)

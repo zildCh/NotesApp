@@ -28,9 +28,9 @@ abstract class ServiceImpl<T,C> implements Service<C>{
         this.converter=converter;
     };
 
-    protected abstract T convertToDAO(C dtoObj);
-    protected abstract C convertToDTO(T daoObj);
-    protected abstract T updateDAO(T daoObj, C dtoObj);
+    //protected abstract T convertToDAO(C dtoObj);
+    //protected abstract C convertToDTO(T daoObj);
+   // protected abstract T updateDAO(T daoObj, C dtoObj);
 
     @Override
     public void create(C dtoObj){

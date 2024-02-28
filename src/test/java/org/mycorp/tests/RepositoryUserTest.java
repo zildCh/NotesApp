@@ -1,14 +1,12 @@
 package org.mycorp.tests;
 
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mycorp.models_dao.UserDao;
 import org.mycorp.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -35,6 +33,7 @@ public class RepositoryUserTest {
 
         // Проверяем, что у сохраненного пользователя установлен идентификатор
         assertNotNull(savedUser.getId());
+        System.out.println(user.getId());
     }
 }
 

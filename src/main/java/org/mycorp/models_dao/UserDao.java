@@ -18,7 +18,7 @@ public class UserDao {
 
     @Convert(converter = ConverterPassword.class)
     @Column(name = "password_hash", columnDefinition = "bytea")
-    @Type(type = "org.hibernate.type.BinaryType")
+    //@Type(type = "org.hibernate.type.BinaryType")
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

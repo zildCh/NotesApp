@@ -7,7 +7,7 @@ import androidx.room.Query
 
 @Dao
 interface CategoryDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(category: CategoryCache)
 
     @Query("SELECT * FROM category")

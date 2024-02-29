@@ -18,7 +18,13 @@ interface ListLiveDataWrapper {
     }
 
     interface Update {
-        fun update(noteId: Long, newTitle: String, newText: String, updateTime: Long)
+        fun update(
+            noteId: Long,
+            newTitle: String,
+            newText: String,
+            updateTime: Long,
+            categoryId: Long
+        )
     }
 
     interface Delete {
@@ -40,13 +46,24 @@ interface ListLiveDataWrapper {
             liveData.value = list
         }
 
-        override fun update(noteId: Long, newTitle: String, newText: String, updateTime: Long) {
+        override fun update(
+            noteId: Long,
+            newTitle: String,
+            newText: String,
+            updateTime: Long,
+            categoryId: Long
+        ) {
             val notes = liveData.value
             val newList = notes?.toMutableList()?.let { list ->
                 val note = list.find {
                     it.isIdTheSame(noteId)
                 }
-                val newNote = note?.copy(title = newTitle, text = newText, updateTime = updateTime)
+                val newNote = note?.copy(
+                    title = newTitle,
+                    text = newText,
+                    updateTime = updateTime,
+                    categoryId = categoryId
+                )
                 newNote?.let {
                     val id = list.indexOf(note)
                     list.remove(note)

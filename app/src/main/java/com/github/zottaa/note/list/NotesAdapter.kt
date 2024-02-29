@@ -35,7 +35,7 @@ class NotesAdapter(
 
 class NoteListViewHolder(
     private val binding: ItemNotesListRecyclerViewBinding,
-    private val noteDetails: NoteDetails
+    private val noteDetails: NoteDetails,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun hold(noteUi: NoteUi) {

@@ -1,5 +1,6 @@
 package com.github.zottaa.note.list
 
+import android.widget.Spinner
 import android.widget.TextView
 import com.github.zottaa.note.details.NoteDetailsScreen
 import java.text.SimpleDateFormat
@@ -22,6 +23,17 @@ data class NoteUi(
         textView.text = title
     }
 
+    fun showCategory(spinner: Spinner) {
+        val adapter = spinner.adapter
+        var category: CategoryUi
+        for (i in 0 until adapter.count) {
+            category = adapter.getItem(i) as CategoryUi
+            if (category.id == categoryId) {
+                spinner.setSelection(i)
+            }
+        }
+    }
+
     fun showDate(textView: TextView) {
         val date = Date(updateTime)
         val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
@@ -32,6 +44,6 @@ data class NoteUi(
         textView.text = text
     }
 
-    fun detailsScreen() : NoteDetailsScreen =
-        NoteDetailsScreen(id)
+    fun detailsScreen(categoryId: Long) : NoteDetailsScreen =
+        NoteDetailsScreen(id, categoryId)
 }

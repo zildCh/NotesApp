@@ -12,4 +12,5 @@
     <string name="category_personal">Personal</string>
     <string name="category_sport">Sport</string>
     <string name="category_family">Family</string>
+    <string name="no_category">All</string>
 </resources>

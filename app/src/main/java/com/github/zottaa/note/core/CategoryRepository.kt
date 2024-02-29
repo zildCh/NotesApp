@@ -20,7 +20,6 @@ class CategoryRepository {
 
     class Base(
         private val dao: CategoryDao,
-        private val defaultList: List<String>
     ) : All {
 
         override suspend fun category(categoryId: Long): Category =
@@ -36,7 +35,6 @@ data class Category(
     private val id: Long,
     private val name: String
 ) {
-    fun toUi() {
-        CategoryUi.Base(id, name)
-    }
+    fun toUi(): CategoryUi =
+        CategoryUi(id, name)
 }

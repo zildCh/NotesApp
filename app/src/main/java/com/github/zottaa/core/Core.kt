@@ -18,6 +18,7 @@ interface Core {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
                     val categoryNames = listOf(
+                        context.getString(R.string.no_category),
                         context.getString(R.string.category_family),
                         context.getString(R.string.category_work),
                         context.getString(R.string.category_personal),

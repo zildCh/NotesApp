@@ -4,13 +4,14 @@ import androidx.fragment.app.FragmentManager
 import com.github.zottaa.core.Screen
 
 data class NoteDetailsScreen(
-    private val noteId: Long
+    private val noteId: Long,
+    private val currentCategoryId: Long
 ) : Screen {
     override fun show(supportFragmentManager: FragmentManager, containerId: Int) {
         supportFragmentManager.beginTransaction()
             .add(
                 containerId,
-                NoteDetailsFragment(noteId)
+                NoteDetailsFragment(noteId, currentCategoryId)
             )
             .addToBackStack(NoteDetailsFragment.Companion::class.java.name)
             .commit()

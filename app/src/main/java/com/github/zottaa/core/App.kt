@@ -18,6 +18,7 @@ class App : Application(), ProvideViewModel {
             ProvideViewModel.Base(
                 clear,
                 core.notesDao(),
+                core.categoryDao()
             )
         )
         super.onCreate()

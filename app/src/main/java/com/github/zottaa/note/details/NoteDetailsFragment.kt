@@ -1,18 +1,23 @@
 package com.github.zottaa.note.details
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import com.github.zottaa.core.AbstractFragment
 import com.github.zottaa.core.ProvideViewModel
 import com.github.zottaa.databinding.FragmentNoteDetailsBinding
+import com.github.zottaa.note.list.CategoryUi
 import com.google.android.material.textfield.TextInputEditText
 
 class NoteDetailsFragment(
-    private var noteId: Long = -1
+    private var noteId: Long = -1,
+    private val currentCategoryId: Long
 ) : AbstractFragment<FragmentNoteDetailsBinding>() {
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentNoteDetailsBinding =
         FragmentNoteDetailsBinding.inflate(inflater, container, false)
@@ -50,18 +55,46 @@ class NoteDetailsFragment(
             viewModel.updateNote(
                 noteId,
                 binding.noteTitleEditText.text.toString(),
-                binding.noteTextEditText.text.toString()
+                binding.noteTextEditText.text.toString(),
+                (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id
             )
         }
+
+        val spinnerAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.simple_spinner_item,
+            mutableListOf<CategoryUi>()
+        )
+
+        binding.noteDetailCategorySpinner.adapter = spinnerAdapter
+        binding.noteDetailCategorySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
 
         binding.deleteNoteButton.setOnClickListener {
             hideKeyboard()
             viewModel.deleteNote(noteId)
         }
 
+        viewModel.categoryLiveData.observe(viewLifecycleOwner) {
+            spinnerAdapter.clear()
+            spinnerAdapter.addAll(it)
+        }
+
         viewModel.liveData().observe(viewLifecycleOwner) {
             it.showTitle(binding.noteTitleEditText)
             it.showText(binding.noteTextEditText)
+            it.showCategory(binding.noteDetailCategorySpinner)
         }
 
         viewModel.init(noteId)

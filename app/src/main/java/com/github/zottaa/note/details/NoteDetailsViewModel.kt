@@ -1,13 +1,16 @@
 package com.github.zottaa.note.details
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.zottaa.core.ClearViewModels
 import com.github.zottaa.core.Now
 import com.github.zottaa.core.Screen
 import com.github.zottaa.main.Navigation
+import com.github.zottaa.note.core.CategoryRepository
 import com.github.zottaa.note.core.NoteLiveDataWrapper
 import com.github.zottaa.note.core.NotesRepository
+import com.github.zottaa.note.list.CategoryUi
 import com.github.zottaa.note.list.ListLiveDataWrapper
 import com.github.zottaa.note.list.NoteUi
 import com.github.zottaa.note.list.NotesListScreen
@@ -19,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class NoteDetailsViewModel(
+    private val categoryRepository: CategoryRepository.All,
     private val noteLiveDataWrapper: NoteLiveDataWrapper.Mutable,
     private val noteListLiveDataWrapper: ListLiveDataWrapper.Edit,
     private val repository: NotesRepository.Edit,
@@ -30,10 +34,15 @@ class NoteDetailsViewModel(
 ) : ViewModel(), NoteLiveDataWrapper.Read {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
+    val categoryLiveData: LiveData<List<CategoryUi>>
+        get() = _categoryLiveData
+    private val _categoryLiveData: MutableLiveData<List<CategoryUi>> = MutableLiveData()
+
     fun init(noteId: Long) {
         viewModelScope.launch(dispatcher) {
             val note = repository.note(noteId)
             withContext(dispatcherMain) {
+                _categoryLiveData.value = categoryRepository.categories().map { it.toUi() }
                 noteLiveDataWrapper.update(note.toUi())
             }
         }
@@ -49,11 +58,11 @@ class NoteDetailsViewModel(
         }
     }
 
-    fun updateNote(noteId: Long, newTitle: String, newText: String) {
+    fun updateNote(noteId: Long, newTitle: String, newText: String, categoryId: Long) {
         viewModelScope.launch(dispatcher) {
-            repository.updateNote(noteId, newTitle, newText, 0)
+            repository.updateNote(noteId, newTitle, newText, categoryId)
             withContext(dispatcherMain) {
-                noteListLiveDataWrapper.update(noteId, newTitle, newText, now.timeInMillis())
+                noteListLiveDataWrapper.update(noteId, newTitle, newText, now.timeInMillis(), categoryId)
                 comeback()
             }
         }

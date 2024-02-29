@@ -3,6 +3,7 @@ package com.github.zottaa.core
 import androidx.lifecycle.ViewModel
 import com.github.zottaa.main.MainViewModel
 import com.github.zottaa.main.Navigation
+import com.github.zottaa.note.core.CategoryRepository
 import com.github.zottaa.note.core.NoteLiveDataWrapper
 import com.github.zottaa.note.core.NotesRepository
 import com.github.zottaa.note.create.CreateNoteViewModel
@@ -37,6 +38,7 @@ interface ProvideViewModel {
     class Base(
         private val clear: ClearViewModels,
         notesDao: NotesDao,
+        categoriesDao: CategoryDao
     ) : ProvideViewModel {
 
         private val now = Now.Base()
@@ -45,6 +47,7 @@ interface ProvideViewModel {
         private val sharedNoteLiveDataWrapper = NoteLiveDataWrapper.Base()
         private val sharedNoteListLiveDataWrapper = ListLiveDataWrapper.Base()
         private val notesRepository = NotesRepository.Base(now, notesDao)
+        private val categoryRepository = CategoryRepository.Base(categoriesDao)
 
         override fun <T : ViewModel> viewModel(clasz: Class<T>): T {
             return when (clasz) {
@@ -53,6 +56,7 @@ interface ProvideViewModel {
                 )
 
                 NoteDetailsViewModel::class.java -> NoteDetailsViewModel(
+                    categoryRepository,
                     sharedNoteLiveDataWrapper,
                     sharedNoteListLiveDataWrapper,
                     notesRepository,
@@ -64,6 +68,7 @@ interface ProvideViewModel {
                 )
 
                 NoteListViewModel::class.java -> NoteListViewModel(
+                    categoryRepository,
                     notesRepository,
                     sharedNoteListLiveDataWrapper,
                     sharedNoteLiveDataWrapper,
@@ -73,6 +78,7 @@ interface ProvideViewModel {
                 )
 
                 CreateNoteViewModel::class.java -> CreateNoteViewModel(
+                    categoryRepository,
                     sharedNoteListLiveDataWrapper,
                     notesRepository,
                     navigation,

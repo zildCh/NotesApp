@@ -15,9 +15,12 @@ public class UserDao {
     private int id;
     @Column(name = "nickname")
     private String nickname;
+
+    @Convert(converter = ConverterPassword.class)
     @Column(name = "password_hash", columnDefinition = "bytea")
     @Type(type = "org.hibernate.type.BinaryType")
-    private byte[] password;
+    private String password;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     private List<CategoryDao> categoryDaoList;
@@ -25,13 +28,13 @@ public class UserDao {
     public UserDao() {
     }
 
-    public UserDao(int id, String nickname, byte[] password) {
+    public UserDao(int id, String nickname, String password) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
         this.categoryDaoList = new ArrayList<CategoryDao>();
     }
-    public UserDao(String nickname, byte[] password) {
+    public UserDao(String nickname, String password) {
         this.nickname = nickname;
         this.password = password;
         this.categoryDaoList = new ArrayList<CategoryDao>();
@@ -53,7 +56,7 @@ public class UserDao {
         return nickname;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -65,7 +68,7 @@ public class UserDao {
         this.nickname = nickname;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

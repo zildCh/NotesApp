@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RepositoryUser extends RepositoryInterface<UserDao> {
+
+     UserDao findByNickname(String nickname);
 }
 

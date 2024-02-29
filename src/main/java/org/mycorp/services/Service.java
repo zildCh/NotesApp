@@ -1,66 +1,55 @@
 package org.mycorp.services;
 
 import org.mycorp.repository.RepositoryInterface;
-import org.mycorp.services.converter.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public interface Service<C> {
-    void create(C dtoObj);
-    List<C> readAll();
-    C read(int id);
-    boolean update(C dtoObj, int id);
+public interface Service<T> {
+    void create(T daoObj);
+    List<T> readAll();
+    T read(int id);
+    boolean update(T daoObj, int id);
     boolean delete(int id);
 }
 
-abstract class ServiceImpl<T,C> implements Service<C>{
-
+abstract class ServiceImpl<T> implements Service<T>{
 
     RepositoryInterface<T> repository;
-    Converter<C,T> converter;
 
     @Autowired
-    ServiceImpl(RepositoryInterface<T> rep, Converter<C,T> converter){
+    ServiceImpl(RepositoryInterface<T> rep){
         this.repository=rep;
-        this.converter=converter;
     };
 
-    //protected abstract T convertToDAO(C dtoObj);
-    //protected abstract C convertToDTO(T daoObj);
-   // protected abstract T updateDAO(T daoObj, C dtoObj);
+    abstract protected T updateDao(T newDao, T daoToUpdate);
 
     @Override
-    public void create(C dtoObj){
-        T daoObject=converter.convertToDao(dtoObj);
-        repository.save(daoObject);
+    public void create(T daoObj){
+        repository.save(daoObj);
     };
 
     @Override
-    public List<C> readAll(){
+    public List<T> readAll(){
         List<T> allDAOs = repository.findAll();
-        List<C> allDTOs = new ArrayList<C>();
-        for(T dao : allDAOs){
-            C dto = converter.convertToDto(dao);
-            allDTOs.add(dto);
-        }
-        return allDTOs;
+        return repository.findAll();
     };
 
     @Override
-    public C read(int id){
+    public T read(int id){
         Optional<T> daoObject = repository.findById(id);
-        return converter.convertToDto(daoObject.get());
+        return daoObject.orElse(null);
     };
 
     @Override
-    public boolean update(C dtoObj, int id){
-        Optional<T> daoObject = repository.findById(id);
-        if (daoObject.isPresent()){
-            T updatedDAO = converter.updateDao(daoObject.get(), dtoObj);
+    public boolean update(T newDao, int id){
+        Optional<T> daoToUpdate = repository.findById(id);
+        if (daoToUpdate.isPresent()){
+            T updatedDAO = updateDao(newDao, daoToUpdate.get());
             repository.save(updatedDAO);
+            return true;
         }
         return false;
     };

@@ -26,7 +26,7 @@ public class RepositoryUserTest {
     @Test
     public void saveTest(){
         byte[] myByteArray = {1, 2, 3, 4, 5};
-        user = new UserDao("egor", myByteArray);
+        //user = new UserDao("egor", myByteArray);
 
         // Сохраняем пользователя в репозитории
         UserDao savedUser = repositoryUser.save(user);

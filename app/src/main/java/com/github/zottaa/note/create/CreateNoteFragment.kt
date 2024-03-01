@@ -13,7 +13,7 @@ import com.github.zottaa.core.ProvideViewModel
 import com.github.zottaa.databinding.FragmentNoteCreateBinding
 import com.github.zottaa.note.list.CategoryUi
 
-class CreateNoteFragment(private val currentCategoryId: Long) :
+class CreateNoteFragment(private var currentCategoryId: Long = -1) :
     AbstractFragment<FragmentNoteCreateBinding>() {
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentNoteCreateBinding =
         FragmentNoteCreateBinding.inflate(inflater, container, false)
@@ -22,6 +22,13 @@ class CreateNoteFragment(private val currentCategoryId: Long) :
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             viewModel.comeback()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) {
+            currentCategoryId = savedInstanceState.getLong(NOTE_CREATE_CURRENT_CATEGORY_KEY)
         }
     }
 
@@ -52,14 +59,42 @@ class CreateNoteFragment(private val currentCategoryId: Long) :
         binding.noteCreateCategorySpinner.adapter = spinnerAdapter
 
         viewModel.categoryLiveData.observe(viewLifecycleOwner) {
+            spinnerAdapter.clear()
             spinnerAdapter.addAll(it)
         }
-
         viewModel.init()
+
+        if (savedInstanceState != null) {
+            binding.createNoteEditText.setText(
+                savedInstanceState.getString(NOTE_CREATE_TITLE_CACHE_KEY).toString()
+            )
+            binding.noteCreateCategorySpinner.post {
+                binding.noteCreateCategorySpinner.setSelection(
+                    savedInstanceState.getInt(NOTE_CREATE_CATEGORY_SPINNER_POSITION_KEY)
+                )
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(
+            NOTE_CREATE_CATEGORY_SPINNER_POSITION_KEY,
+            binding.noteCreateCategorySpinner.selectedItemPosition
+        )
+        outState.putString(NOTE_CREATE_TITLE_CACHE_KEY, binding.createNoteEditText.text.toString())
+        outState.putLong(NOTE_CREATE_CURRENT_CATEGORY_KEY, currentCategoryId)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         onBackPressedCallback.remove()
+    }
+
+    companion object {
+        private const val NOTE_CREATE_TITLE_CACHE_KEY = "NOTE_CREATE_TITLE_CACHE_KEY"
+        private const val NOTE_CREATE_CATEGORY_SPINNER_POSITION_KEY = "NOTE_CREATE_CATEGORY_SPINNER_POSITION_KEY"
+        private const val NOTE_CREATE_CURRENT_CATEGORY_KEY = "NOTE_CREATE_CURRENT_CATEGORY_KEY"
+
     }
 }

@@ -8,13 +8,14 @@ import com.github.zottaa.databinding.ItemNotesListRecyclerViewBinding
 
 class NotesAdapter(
     private val noteDetails: NoteDetails,
+    private val showNoteCategory: ShowNoteCategory,
     private var list: List<NoteUi> = emptyList()
 ) : RecyclerView.Adapter<NoteListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder {
         val binding = ItemNotesListRecyclerViewBinding.inflate(
             LayoutInflater.from(parent.context)
         )
-        return NoteListViewHolder(binding, noteDetails)
+        return NoteListViewHolder(binding, noteDetails, showNoteCategory)
     }
 
     override fun getItemCount(): Int = list.size
@@ -36,6 +37,7 @@ class NotesAdapter(
 class NoteListViewHolder(
     private val binding: ItemNotesListRecyclerViewBinding,
     private val noteDetails: NoteDetails,
+    private val showNoteCategory: ShowNoteCategory
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun hold(noteUi: NoteUi) {
@@ -45,6 +47,7 @@ class NoteListViewHolder(
             binding.notesLinearLayout.setOnClickListener {
                 noteDetails.noteDetails(noteUi)
             }
+            showNoteCategory.showNoteCategory(binding.noteCategoryTextView, noteUi)
         }
     }
 }

@@ -17,7 +17,7 @@ import com.google.android.material.textfield.TextInputEditText
 
 class NoteDetailsFragment(
     private var noteId: Long = -1,
-    private val currentCategoryId: Long
+    private var currentCategoryId: Long = -1
 ) : AbstractFragment<FragmentNoteDetailsBinding>() {
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentNoteDetailsBinding =
         FragmentNoteDetailsBinding.inflate(inflater, container, false)
@@ -34,12 +34,42 @@ class NoteDetailsFragment(
 
         if (savedInstanceState != null) {
             noteId = savedInstanceState.getLong(NOTE_ID_KEY)
+            currentCategoryId = savedInstanceState.getLong(CURRENT_CATEGORY_KEY)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong(NOTE_ID_KEY, noteId)
+        outState.putLong(CURRENT_CATEGORY_KEY, currentCategoryId)
+        binding.noteTitleEditText.text?.let {
+            outState.putString(
+                NOTE_DETAILS_TITLE_CACHE_KEY,
+                binding.noteTitleEditText.text.toString()
+            )
+        } ?: {
+            outState.putString(
+                NOTE_DETAILS_TITLE_CACHE_KEY,
+                ""
+            )
+        }
+
+        binding.noteTitleEditText.text?.let {
+            outState.putString(
+                NOTE_DETAILS_TEXT_CACHE_KEY,
+                binding.noteTextEditText.text.toString()
+            )
+        } ?: {
+            outState.putString(
+                NOTE_DETAILS_TEXT_CACHE_KEY,
+                ""
+            )
+        }
+
+        outState.putInt(
+            NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY,
+            binding.noteDetailCategorySpinner.selectedItemPosition
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +86,8 @@ class NoteDetailsFragment(
                 noteId,
                 binding.noteTitleEditText.text.toString(),
                 binding.noteTextEditText.text.toString(),
-                (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id
+                (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id,
+                currentCategoryId
             )
         }
 
@@ -98,12 +129,32 @@ class NoteDetailsFragment(
         }
 
         viewModel.init(noteId)
+
+        if (savedInstanceState != null) {
+            binding.noteTitleEditText.setText(
+                savedInstanceState.getString(
+                    NOTE_DETAILS_TITLE_CACHE_KEY
+                ).toString()
+            )
+            binding.noteTextEditText.setText(
+                savedInstanceState.getString(
+                    NOTE_DETAILS_TEXT_CACHE_KEY
+                ).toString()
+            )
+            binding.noteDetailCategorySpinner.post {
+                binding.noteDetailCategorySpinner.setSelection(
+                    savedInstanceState.getInt(
+                        NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY
+                    )
+                )
+            }
+        }
     }
 
     private fun addSaveButtonListener(inputEditText: TextInputEditText) {
         inputEditText.addTextChangedListener {
-            binding.saveNoteButton.isEnabled = binding.noteTitleEditText.toString()
-                .isNotEmpty() && binding.noteTextEditText.toString().isNotEmpty()
+            binding.saveNoteButton.isEnabled = binding.noteTitleEditText.text.toString()
+                .isNotEmpty() || binding.noteTextEditText.text.toString().isNotEmpty()
         }
     }
 
@@ -113,6 +164,11 @@ class NoteDetailsFragment(
     }
 
     companion object {
-        private const val NOTE_ID_KEY = "note_key"
+        private const val NOTE_ID_KEY = "noteKey"
+        private const val NOTE_DETAILS_TITLE_CACHE_KEY = "NOTE_DETAILS_TITLE_CACHE_KEY"
+        private const val NOTE_DETAILS_TEXT_CACHE_KEY = "NOTE_DETAILS_TEXT_CACHE_KEY"
+        private const val NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY =
+            "NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY"
+        private const val CURRENT_CATEGORY_KEY = "currentCategoryKey"
     }
 }

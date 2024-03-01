@@ -18,7 +18,4 @@ interface NotesDao {
 
     @Query("DELETE FROM notes WHERE note_id = :noteId")
     suspend fun delete(noteId: Long)
-
-    @Query("SELECT * FROM notes where category_id = :categoryId")
-    suspend fun notesByCategory(categoryId: Long): List<NoteCache>
 }

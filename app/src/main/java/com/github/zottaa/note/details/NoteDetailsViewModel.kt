@@ -58,11 +58,26 @@ class NoteDetailsViewModel(
         }
     }
 
-    fun updateNote(noteId: Long, newTitle: String, newText: String, categoryId: Long) {
+    fun updateNote(
+        noteId: Long,
+        newTitle: String,
+        newText: String,
+        categoryId: Long,
+        currentCategory: Long
+    ) {
         viewModelScope.launch(dispatcher) {
             repository.updateNote(noteId, newTitle, newText, categoryId)
             withContext(dispatcherMain) {
-                noteListLiveDataWrapper.update(noteId, newTitle, newText, now.timeInMillis(), categoryId)
+                if (categoryId != currentCategory && currentCategory != 1L)
+                    noteListLiveDataWrapper.delete(noteId)
+                else
+                    noteListLiveDataWrapper.update(
+                        noteId,
+                        newTitle,
+                        newText,
+                        now.timeInMillis(),
+                        categoryId
+                    )
                 comeback()
             }
         }

@@ -37,9 +37,10 @@ class NoteListViewModel(
             val notes = repository.notes().map { it.toUi() }.filter {
                 category.isValid(it)
             }
+            val categories = categoryRepository.categories().map { it.toUi() }
             withContext(dispatcherMain) {
                 listLiveDataWrapper.update(notes)
-                _categoryLiveData.value = categoryRepository.categories().map { it.toUi() }
+                _categoryLiveData.value = categories
             }
         }
     }

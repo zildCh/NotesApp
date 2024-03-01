@@ -8,6 +8,4 @@ data class CategoryUi(
     override fun toString(): String {
         return name
     }
-
-
 }

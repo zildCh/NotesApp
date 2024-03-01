@@ -29,6 +29,19 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
                         (binding.categorySpinner.selectedItem as CategoryUi).id
                     )
                 }
+            },
+            object : ShowNoteCategory {
+                override fun showNoteCategory(textView: TextView, noteUi: NoteUi) {
+                    var category: CategoryUi
+                    for (i in 0 until binding.categorySpinner.adapter.count) {
+                        category = binding.categorySpinner.adapter.getItem(i) as CategoryUi
+                        if (noteUi.isCategoryIdTheSame(category.id)) {
+                            textView.text = category.toString()
+                            break
+                        }
+                    }
+                }
+
             }
         )
 
@@ -82,21 +95,20 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
         )
 
         if (savedInstanceState != null)
-            binding.categorySpinner.setSelection(
-                savedInstanceState.getInt(CATEGORY_SPINNER_KEY),
-                true
-            )
+            binding.categorySpinner.post {
+                binding.categorySpinner.setSelection(
+                    savedInstanceState.getInt(NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY)
+                )
+            }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putLong(CATEGORY_KEY, (binding.categorySpinner.selectedItem as CategoryUi).id)
-        outState.putInt(CATEGORY_SPINNER_KEY, binding.categorySpinner.selectedItemPosition)
+        outState.putInt(NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY, binding.categorySpinner.selectedItemPosition)
     }
 
     companion object {
         private const val INITIAL_CATEGORY_ID = 1L
-        private const val CATEGORY_KEY = "categoryKey"
-        private const val CATEGORY_SPINNER_KEY = "categorySpinnerKey"
+        private const val NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY = "NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY"
     }
 }

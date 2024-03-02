@@ -27,11 +27,21 @@ interface ListLiveDataWrapper {
         )
     }
 
+    interface UpdateOrCreate {
+        fun updateOrCreate(
+            noteId: Long,
+            newTitle: String,
+            newText: String,
+            updateTime: Long,
+            categoryId: Long
+        )
+    }
+
     interface Delete {
         fun delete(noteId: Long)
     }
 
-    interface Edit : Update, Delete
+    interface Edit : Update, Delete, UpdateOrCreate
 
     interface Mutable : Read, UpdateList, Edit
 
@@ -71,7 +81,7 @@ interface ListLiveDataWrapper {
                     list
                 }
             }
-            liveData.value = newList
+            update(newList!!.toList())
         }
 
         override fun delete(noteId: Long) {
@@ -83,7 +93,39 @@ interface ListLiveDataWrapper {
                 list.remove(note)
                 list
             }
-            liveData.value = newList
+            update(newList!!.toList())
+        }
+
+        override fun updateOrCreate(
+            noteId: Long,
+            newTitle: String,
+            newText: String,
+            updateTime: Long,
+            categoryId: Long
+        ) {
+            val notes = liveData.value
+            val newList = notes?.toMutableList()?.let { list ->
+                val note = list.find {
+                    it.isIdTheSame(noteId)
+                }
+                note?.let {
+                    val newNote = note.copy(
+                        title = newTitle,
+                        text = newText,
+                        updateTime = updateTime,
+                        categoryId = categoryId
+                    )
+                    newNote.let {
+                        val id = list.indexOf(note)
+                        list.remove(note)
+                        list.add(newNote)
+                    }
+                } ?: {
+                    list.add(NoteUi(noteId, newTitle, newText, updateTime, categoryId))
+                }
+                list
+            }
+            update(newList!!.toList())
         }
 
         override fun create(noteUi: NoteUi) {

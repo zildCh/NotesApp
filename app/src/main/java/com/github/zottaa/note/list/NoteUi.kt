@@ -2,6 +2,8 @@ package com.github.zottaa.note.list
 
 import android.widget.Spinner
 import android.widget.TextView
+import com.github.zottaa.R
+import com.github.zottaa.note.details.LetterCount
 import com.github.zottaa.note.details.NoteDetailsScreen
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -34,14 +36,21 @@ data class NoteUi(
         }
     }
 
-    fun showDate(textView: TextView) {
+    fun showUpdateTime(textView: TextView): String {
         val date = Date(updateTime)
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val format = SimpleDateFormat("dd.MM.yyyy, HH:mm")
         textView.text = format.format(date)
+        return format.format(date)
     }
 
     fun showText(textView: TextView) {
         textView.text = text
+    }
+
+    fun showUpdateTimeAndLettersCount(textView: TextView) {
+        val updateTime = showUpdateTime(textView)
+        val letterCount = LetterCount.Base().count(text)
+        textView.text = textView.context.getString(R.string.update_time_and_letter_count, updateTime, letterCount)
     }
 
     fun detailsScreen(categoryId: Long) : NoteDetailsScreen =

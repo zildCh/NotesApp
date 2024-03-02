@@ -18,6 +18,7 @@
         android:id="@+id/createNoteEditText"
         android:layout_margin="8dp"
         android:layout_width="match_parent"
+        android:hint="@string/hint_title"
         android:layout_height="wrap_content" />
 
     <Spinner

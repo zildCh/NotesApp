@@ -71,14 +71,13 @@ class NoteDetailsViewModel(
                 if (categoryId != currentCategory && currentCategory != 1L)
                     noteListLiveDataWrapper.delete(noteId)
                 else
-                    noteListLiveDataWrapper.update(
+                    noteListLiveDataWrapper.updateOrCreate(
                         noteId,
                         newTitle,
                         newText,
                         now.timeInMillis(),
                         categoryId
                     )
-                comeback()
             }
         }
     }

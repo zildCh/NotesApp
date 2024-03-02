@@ -23,8 +23,13 @@ class NoteDetailsFragment(
         FragmentNoteDetailsBinding.inflate(inflater, container, false)
 
     private lateinit var viewModel: NoteDetailsViewModel
+    private lateinit var letterCount: LetterCount
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            if (binding.noteTextEditText.text.toString()
+                    .isEmpty() && binding.noteTitleEditText.text.toString().isEmpty()
+            )
+                viewModel.deleteNote(noteId)
             viewModel.comeback()
         }
     }
@@ -42,54 +47,13 @@ class NoteDetailsFragment(
         super.onSaveInstanceState(outState)
         outState.putLong(NOTE_ID_KEY, noteId)
         outState.putLong(CURRENT_CATEGORY_KEY, currentCategoryId)
-        binding.noteTitleEditText.text?.let {
-            outState.putString(
-                NOTE_DETAILS_TITLE_CACHE_KEY,
-                binding.noteTitleEditText.text.toString()
-            )
-        } ?: {
-            outState.putString(
-                NOTE_DETAILS_TITLE_CACHE_KEY,
-                ""
-            )
-        }
-
-        binding.noteTitleEditText.text?.let {
-            outState.putString(
-                NOTE_DETAILS_TEXT_CACHE_KEY,
-                binding.noteTextEditText.text.toString()
-            )
-        } ?: {
-            outState.putString(
-                NOTE_DETAILS_TEXT_CACHE_KEY,
-                ""
-            )
-        }
-
-        outState.putInt(
-            NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY,
-            binding.noteDetailCategorySpinner.selectedItemPosition
-        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as ProvideViewModel).viewModel(NoteDetailsViewModel::class.java)
+        letterCount = LetterCount.Base()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
-
-        addSaveButtonListener(binding.noteTitleEditText)
-        addSaveButtonListener(binding.noteTextEditText)
-
-        binding.saveNoteButton.setOnClickListener {
-            hideKeyboard()
-            viewModel.updateNote(
-                noteId,
-                binding.noteTitleEditText.text.toString(),
-                binding.noteTextEditText.text.toString(),
-                (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id,
-                currentCategoryId
-            )
-        }
 
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
@@ -106,6 +70,13 @@ class NoteDetailsFragment(
                     position: Int,
                     id: Long
                 ) {
+                    viewModel.updateNote(
+                        noteId,
+                        binding.noteTitleEditText.text.toString(),
+                        binding.noteTextEditText.text.toString(),
+                        (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id,
+                        currentCategoryId
+                    )
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -126,35 +97,44 @@ class NoteDetailsFragment(
             it.showTitle(binding.noteTitleEditText)
             it.showText(binding.noteTextEditText)
             it.showCategory(binding.noteDetailCategorySpinner)
+            it.showUpdateTimeAndLettersCount(binding.updateTimeAndLettersTextView)
         }
 
         viewModel.init(noteId)
 
-        if (savedInstanceState != null) {
-            binding.noteTitleEditText.setText(
-                savedInstanceState.getString(
-                    NOTE_DETAILS_TITLE_CACHE_KEY
-                ).toString()
-            )
-            binding.noteTextEditText.setText(
-                savedInstanceState.getString(
-                    NOTE_DETAILS_TEXT_CACHE_KEY
-                ).toString()
-            )
-            binding.noteDetailCategorySpinner.post {
-                binding.noteDetailCategorySpinner.setSelection(
-                    savedInstanceState.getInt(
-                        NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY
-                    )
-                )
-            }
-        }
+        addUpdateListener(binding.noteTitleEditText)
+        addUpdateListener(binding.noteTextEditText)
     }
 
-    private fun addSaveButtonListener(inputEditText: TextInputEditText) {
+    private fun addUpdateListener(inputEditText: TextInputEditText) {
         inputEditText.addTextChangedListener {
-            binding.saveNoteButton.isEnabled = binding.noteTitleEditText.text.toString()
-                .isNotEmpty() || binding.noteTextEditText.text.toString().isNotEmpty()
+            if (binding.noteTitleEditText.text.toString()
+                    .isNotEmpty() || binding.noteTextEditText.text.toString().isNotEmpty()
+            ) {
+                binding.noteDetailCategorySpinner.selectedItem?.let {
+                    viewModel.updateNote(
+                        noteId,
+                        binding.noteTitleEditText.text.toString(),
+                        binding.noteTextEditText.text.toString(),
+                        (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id,
+                        currentCategoryId
+                    )
+                }
+                if (binding.updateTimeAndLettersTextView.text.toString().isNotEmpty()) {
+                    val raw = binding.updateTimeAndLettersTextView.text.toString()
+                    val delimiterIndex = raw.indexOf(" |")
+                    val updateTime = raw.substring(0..<delimiterIndex)
+
+                    val letterCount = letterCount.count(binding.noteTextEditText.text.toString())
+
+                    binding.updateTimeAndLettersTextView.text =
+                        requireContext().resources.getString(
+                            com.github.zottaa.R.string.update_time_and_letter_count,
+                            updateTime,
+                            letterCount
+                        )
+                }
+            }
         }
     }
 
@@ -165,10 +145,6 @@ class NoteDetailsFragment(
 
     companion object {
         private const val NOTE_ID_KEY = "noteKey"
-        private const val NOTE_DETAILS_TITLE_CACHE_KEY = "NOTE_DETAILS_TITLE_CACHE_KEY"
-        private const val NOTE_DETAILS_TEXT_CACHE_KEY = "NOTE_DETAILS_TEXT_CACHE_KEY"
-        private const val NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY =
-            "NOTE_DETAILS_CATEGORY_SPINNER_POSITION_KEY"
         private const val CURRENT_CATEGORY_KEY = "currentCategoryKey"
     }
 }

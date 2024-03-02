@@ -2,6 +2,7 @@ package com.github.zottaa.note.core
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.github.zottaa.core.SingleLiveEvent
 import com.github.zottaa.note.list.NoteUi
 
 interface NoteLiveDataWrapper {
@@ -22,7 +23,7 @@ interface NoteLiveDataWrapper {
     interface All : Mutable, Change
 
     class Base(
-        private val liveData: MutableLiveData<NoteUi> = MutableLiveData()
+        private val liveData: MutableLiveData<NoteUi> = SingleLiveEvent()
     ) : All {
         override fun update(noteUi: NoteUi) {
             liveData.value = noteUi

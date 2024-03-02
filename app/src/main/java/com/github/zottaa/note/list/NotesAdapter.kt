@@ -43,7 +43,7 @@ class NoteListViewHolder(
     fun hold(noteUi: NoteUi) {
         noteUi.apply {
             showTitle(binding.noteTitleTextView)
-            showDate(binding.noteEditDateTextView)
+            showUpdateTime(binding.noteEditDateTextView)
             binding.notesLinearLayout.setOnClickListener {
                 noteDetails.noteDetails(noteUi)
             }

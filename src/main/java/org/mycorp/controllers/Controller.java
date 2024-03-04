@@ -21,7 +21,7 @@ public abstract class Controller<T extends AbstractEntity> {
 
     public ResponseEntity<?> createEntity(int idParent, T entity){
         boolean created = adapter.createEntity(idParent, entity);
-        return created ? new ResponseEntity<>(entity.getId(), HttpStatus.OK)
+        return created ? new ResponseEntity<>(entity.getId(), HttpStatus.CREATED)
                        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     };

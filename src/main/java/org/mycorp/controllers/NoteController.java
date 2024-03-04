@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/users/{id_user}/category/{id_category}/notes")
+@RequestMapping("/category/{id_category}/notes")
 public class NoteController extends Controller<NoteDao> {
 
     AdapterNote adapterNote;

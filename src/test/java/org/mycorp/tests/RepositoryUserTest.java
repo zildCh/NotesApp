@@ -2,7 +2,7 @@ package org.mycorp.tests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mycorp.models_dao.UserDao;
+import org.mycorp.models.UserDao;
 import org.mycorp.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

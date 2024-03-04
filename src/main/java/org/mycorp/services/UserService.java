@@ -1,6 +1,7 @@
 package org.mycorp.services;
 
-import org.mycorp.models_dao.UserDao;
+import org.mycorp.models.CategoryDao;
+import org.mycorp.models.UserDao;
 import org.mycorp.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,11 +21,12 @@ public class UserService extends ServiceImpl<UserDao>{
     @Override
     protected UserDao updateDao(UserDao newDao, UserDao daoToUpdate) {
         daoToUpdate.setNickname(newDao.getNickname());
-        daoToUpdate.setPassword(newDao.getPassword());
+        daoToUpdate.setPassword(passwordEncoding(newDao.getPassword()));
         return daoToUpdate;
     }
 
-    public void registration(UserDao user){
+
+    public void registration(UserDao user) {
         user.setPassword(passwordEncoding(user.getPassword()));
         create(user);
     }
@@ -32,7 +34,8 @@ public class UserService extends ServiceImpl<UserDao>{
     public UserDao authorisation(UserDao user){
         UserDao findUser = ((RepositoryUser) repository).findByNickname(user.getNickname());
         if(passwordEncoder.matches(user.getPassword(), findUser.getPassword())){
-            findUser.setPassword("********");
+            findUser.setNickname(null);
+            findUser.setPassword(null);
             return findUser;
         }
         else

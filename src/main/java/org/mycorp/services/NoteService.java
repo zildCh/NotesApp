@@ -1,6 +1,6 @@
 package org.mycorp.services;
 
-import org.mycorp.models_dao.NoteDao;
+import org.mycorp.models.NoteDao;
 import org.mycorp.repository.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

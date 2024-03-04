@@ -1,10 +1,8 @@
-package org.mycorp.models_dao;
+package org.mycorp.models;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 @Entity
 @Table (name = "notes")
 public class NoteDao {
@@ -12,6 +10,7 @@ public class NoteDao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY) //
     @JoinColumn(name = "id_category")
     private CategoryDao category;

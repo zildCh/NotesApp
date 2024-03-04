@@ -1,11 +1,11 @@
-package org.mycorp.models_dao;
+package org.mycorp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table (name = "category")
@@ -14,6 +14,7 @@ public class CategoryDao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY) //
     @JoinColumn(name = "id_user")
     private UserDao user;
@@ -73,21 +74,7 @@ public class CategoryDao {
     public String toString() {
         return "CategoryDao{" +
                 "id=" + id +
-                ", user=" + user +
                 ", category='" + category + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CategoryDao)) return false;
-        CategoryDao that = (CategoryDao) o;
-        return getId() == that.getId() && Objects.equals(getUser(), that.getUser()) && Objects.equals(getCategory(), that.getCategory()) && Objects.equals(getNoteDaoList(), that.getNoteDaoList());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUser(), getCategory(), getNoteDaoList());
     }
 }

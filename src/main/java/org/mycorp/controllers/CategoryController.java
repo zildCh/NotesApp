@@ -1,37 +1,45 @@
 package org.mycorp.controllers;
 
-import org.mycorp.models_dao.CategoryDao;
-import org.mycorp.services.CategoryService;
+import org.mycorp.adapters.Adapter;
+import org.mycorp.models.CategoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-public class CategoryController extends Controller<CategoryDao> {
+@RestController
+@RequestMapping("/users/{id_user}/category")
+public class CategoryController {
 
-    final CategoryService categoryService;
+    //final CategoryService categoryService;
+    final Adapter adapterCategory;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-    @Override
-    public ResponseEntity<?> createEntity(CategoryDao entity) {
-        categoryService.create(entity);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public CategoryController(Adapter adapterCategory) {
+        this.adapterCategory = adapterCategory;
     }
 
-    @Override
-    public ResponseEntity<?> updateEntity(int id, CategoryDao entity) {
-        final boolean updated = categoryService.update(entity, id);
+
+    @PostMapping
+    public ResponseEntity<?> createEntity(@PathVariable int id_user, @RequestBody CategoryDao entity) {
+        adapterCategory.createCategory(id_user, entity);
+        return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEntity(@PathVariable int id_user, @RequestBody CategoryDao entity, @PathVariable int id) {
+        final boolean updated = adapterCategory.updateCategory(id, entity);
 
         return updated
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @Override
-    public ResponseEntity<?> deleteEntity(int id) {
-        final boolean deleted = categoryService.delete(id);
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEntity(@PathVariable int id_user, @PathVariable int id) {
+        final boolean deleted = adapterCategory.deleteCategory(id);
 
         return deleted
                 ? new ResponseEntity<>(HttpStatus.OK)

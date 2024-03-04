@@ -1,14 +1,11 @@
 package org.mycorp.controllers;
 
-import org.mycorp.models_dao.UserDao;
+import org.mycorp.models.UserDao;
 import org.mycorp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -23,25 +20,31 @@ public class UserController extends Controller<UserDao>{
 
 
     @Override
-    public ResponseEntity<?> createEntity(UserDao entity) {
+    public ResponseEntity<?> createEntity(@RequestBody UserDao entity) {
         userService.registration(entity);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<?> updateEntity(int id, UserDao entity) {
-        return null;
+    public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody UserDao entity) {
+        final boolean updated = userService.update(entity, id);
+
+        return updated
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @Override
-    public ResponseEntity<?> deleteEntity(int id) {
-        return null;
+    public ResponseEntity<?> deleteEntity(@PathVariable int id) {
+        final boolean deleted = userService.delete(id);
+
+        return deleted
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
-
-
 
     @GetMapping
-    public ResponseEntity<UserDao> Authorisation(@PathVariable UserDao userToAuth) {
+    public ResponseEntity<UserDao> Authorisation(@RequestBody UserDao userToAuth) {
         final UserDao user = userService.authorisation(userToAuth);
 
         return user != null

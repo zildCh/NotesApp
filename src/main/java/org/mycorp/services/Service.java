@@ -1,5 +1,6 @@
 package org.mycorp.services;
 
+import org.mycorp.models.UserDao;
 import org.mycorp.repository.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -8,12 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Service<T> {
+
     void create(T daoObj);
     List<T> readAll();
     T read(int id);
     boolean update(T daoObj, int id);
     boolean delete(int id);
 }
+
+
 
 abstract class ServiceImpl<T> implements Service<T>{
 

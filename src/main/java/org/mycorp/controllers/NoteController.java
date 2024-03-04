@@ -1,16 +1,16 @@
 package org.mycorp.controllers;
 
-import org.mycorp.models_dao.NoteDao;
+import org.mycorp.models.NoteDao;
 import org.mycorp.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
-@RequestMapping("/notes")
-public class NoteController extends Controller<NoteDao> {
+@RequestMapping("/users/{userId}/category/{categoryId}/notes")
+public class NoteController {
 
     final NoteService noteService;
 
@@ -19,16 +19,15 @@ public class NoteController extends Controller<NoteDao> {
         this.noteService = noteService;
     }
 
-
-
-    @Override
-    public ResponseEntity<?> createEntity(NoteDao entity) {
+    @PostMapping
+    public ResponseEntity<?> createEntity(@PathVariable int id_user, @PathVariable int id_category, @RequestBody NoteDao entity) {
         noteService.create(entity);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
     }
 
-    @Override
-    public ResponseEntity<?> updateEntity(int id, NoteDao entity) {
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEntity(@PathVariable int id_user, @PathVariable int id_category, @PathVariable int id, @RequestBody NoteDao entity) {
         final boolean updated = noteService.update(entity, id);
 
         return updated
@@ -36,8 +35,8 @@ public class NoteController extends Controller<NoteDao> {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @Override
-    public ResponseEntity<?> deleteEntity(int id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEntity(@PathVariable int id_user, @PathVariable int id_category, @PathVariable int id) {
         final boolean deleted = noteService.delete(id);
 
         return deleted

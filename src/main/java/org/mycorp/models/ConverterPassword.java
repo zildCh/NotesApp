@@ -1,4 +1,4 @@
-package org.mycorp.models_dao;
+package org.mycorp.models;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -14,6 +14,6 @@ public class ConverterPassword implements AttributeConverter<String, byte[]> {
 
     @Override
     public String convertToEntityAttribute(byte[] dbData) {
-        return dbData.toString();
+        return new String(dbData);
     }
 }

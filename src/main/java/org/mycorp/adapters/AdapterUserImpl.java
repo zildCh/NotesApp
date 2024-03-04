@@ -34,7 +34,12 @@ public class AdapterUserImpl implements AdapterUser {
     }
 
     @Override
-    public UserDao getUser(UserDao userToAuth) {
-        return service.read(userToAuth);
+    public UserDao getUser(int id) {
+        return service.read(id);
+    }
+
+    @Override
+    public UserDao authorisation(UserDao userToAuth) {
+        return service.authorisation(userToAuth);
     }
 }

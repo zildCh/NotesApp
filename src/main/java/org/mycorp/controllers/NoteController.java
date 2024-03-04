@@ -8,7 +8,6 @@ import org.mycorp.models.NoteDao;
 import org.mycorp.services.NoteService;
 import org.openjdk.tools.javac.util.JCDiagnostic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,7 @@ public class NoteController extends Controller<NoteDao> {
     }
 
     @Override
-    @PostMapping("/users/{id_user}/category/{id_category}/notes")
+    @PostMapping
     public ResponseEntity<?> createEntity(@PathVariable("id_category") int id_category, @RequestBody NoteDao entity) {
         return super.createEntity(id_category, entity);
     }

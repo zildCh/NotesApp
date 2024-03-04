@@ -21,7 +21,7 @@ public class UserController{
     @PostMapping
     public ResponseEntity<?> createEntity(@RequestBody UserDao entity) {
         adapterUser.registration(entity);
-        return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody UserDao entity) {
@@ -41,11 +41,21 @@ public class UserController{
     }
 
     @GetMapping
-    public ResponseEntity<UserDao> Authorisation(@RequestBody UserDao userToAuth) {
-        final UserDao user = adapterUser.getUser(userToAuth);
+    public ResponseEntity<UserDao> authorisation(@RequestBody UserDao userToAuth) {
+        final UserDao user = adapterUser.authorisation(userToAuth);
 
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDao> readUser(@PathVariable int id) {
+        final UserDao user = adapterUser.getUser(id);
+
+        return user != null
+                ? new ResponseEntity<>(user, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 }

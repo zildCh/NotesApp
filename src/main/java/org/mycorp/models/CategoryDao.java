@@ -9,11 +9,8 @@ import java.util.List;
 
 @Entity
 @Table (name = "category")
-public class CategoryDao {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+public class CategoryDao extends AbstractEntity{
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY) //
     @JoinColumn(name = "id_user")
@@ -28,7 +25,7 @@ public class CategoryDao {
     }
 
     public CategoryDao(int id, UserDao user, String category) {
-        this.id = id;
+        super(id);
         this.user = user;
         this.category = category;
         this.noteDaoList = new ArrayList<NoteDao>();
@@ -40,10 +37,6 @@ public class CategoryDao {
     }
     public void removeCategory(NoteDao note) {
         noteDaoList.remove(note);
-    }
-
-    public int getId() {
-        return id;
     }
 
     public UserDao getUser() {
@@ -73,7 +66,7 @@ public class CategoryDao {
     @Override
     public String toString() {
         return "CategoryDao{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", category='" + category + '\'' +
                 '}';
     }

@@ -1,12 +1,15 @@
 package org.mycorp.controllers;
 
 import org.mycorp.adapters.Adapter;
+import org.mycorp.models.AbstractEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-public abstract class Controller<T> {
+import javax.swing.text.html.parser.Entity;
+
+public abstract class Controller<T extends AbstractEntity> {
 
     final Adapter<T> adapter;
 
@@ -18,7 +21,7 @@ public abstract class Controller<T> {
 
     public ResponseEntity<?> createEntity(int idParent, T entity){
         boolean created = adapter.createEntity(idParent, entity);
-        return created ? new ResponseEntity<>(HttpStatus.OK)
+        return created ? new ResponseEntity<>(entity.getId(), HttpStatus.OK)
                        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     };

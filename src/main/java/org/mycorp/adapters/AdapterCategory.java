@@ -2,10 +2,8 @@ package org.mycorp.adapters;
 
 import org.mycorp.models.CategoryDao;
 import org.mycorp.models.UserDao;
-import org.mycorp.repository.RepositoryInterface;
 import org.mycorp.repository.RepositoryUser;
 import org.mycorp.services.CategoryService;
-import org.mycorp.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

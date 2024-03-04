@@ -1,5 +1,6 @@
 package org.mycorp.adapters;
 
+import org.mycorp.models.AbstractEntity;
 import org.mycorp.repository.RepositoryInterface;
 import org.mycorp.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 
-public abstract class AdapterImpl<C, T> implements Adapter<T> {
+public abstract class AdapterImpl<C, T extends AbstractEntity> implements Adapter<T> {
 
     RepositoryInterface<C> repository;
     Service<T> service;

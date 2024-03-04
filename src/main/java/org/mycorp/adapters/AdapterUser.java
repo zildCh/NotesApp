@@ -6,5 +6,6 @@ public interface AdapterUser {
     void registration(UserDao userToReg);
     boolean updateUser(int id, UserDao userToUpdate);
     boolean deleteUser(int id);
-    UserDao getUser(UserDao userToAuth);
+    UserDao authorisation(UserDao userToAuth);
+    UserDao getUser(int id);
 }

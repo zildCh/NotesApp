@@ -5,11 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 @Entity
 @Table (name = "notes")
-public class NoteDao {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+public class NoteDao extends AbstractEntity {
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY) //
     @JoinColumn(name = "id_category")
@@ -22,15 +19,11 @@ public class NoteDao {
     private String header;
     public NoteDao(){}
     public NoteDao(int id, CategoryDao category, String note, String date, String header) {
-        this.id = id;
+        super(id);
         this.category = category;
         this.note = note;
         this.date = date;
         this.header = header;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public CategoryDao getCategory() {

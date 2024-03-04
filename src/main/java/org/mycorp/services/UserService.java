@@ -29,8 +29,15 @@ public class UserService extends ServiceImpl<UserDao>{
         super.create(daoObj);
     };
 
+    @Override
+    public UserDao read(int id){
+        UserDao findUser = super.read(id);
+        findUser.setNickname(null);
+        findUser.setPassword(null);
+        return findUser;
+    }
 
-    public UserDao read(UserDao user){
+    public UserDao authorisation(UserDao user){
         UserDao findUser = ((RepositoryUser) repository).findByNickname(user.getNickname());
         UserDao authorizedUser=authService.authorisation(user,findUser);
         if(authorizedUser == null)

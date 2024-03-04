@@ -5,7 +5,9 @@ import org.mycorp.repository.RepositoryCategory;
 import org.mycorp.services.NoteService;
 import org.mycorp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AdapterUserImpl implements AdapterUser {
 
     final UserService service;
@@ -17,22 +19,22 @@ public class AdapterUserImpl implements AdapterUser {
 
 
     @Override
-    public void registration(UserDao userToReg) {
-        service.registration(userToReg);
+    public void registration(UserDao user) {
+        service.create(user);
     }
 
     @Override
     public boolean updateUser(int id, UserDao userToUpdate) {
-        return false;
+        return service.update(userToUpdate, id);
     }
 
     @Override
     public boolean deleteUser(int id) {
-        return false;
+        return service.delete(id);
     }
 
     @Override
-    public UserDao authorisation(UserDao userToAuth) {
-        return null;
+    public UserDao getUser(UserDao userToAuth) {
+        return service.read(userToAuth);
     }
 }

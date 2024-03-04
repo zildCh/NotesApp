@@ -1,6 +1,7 @@
 package org.mycorp.controllers;
 
 import org.mycorp.adapters.Adapter;
+import org.mycorp.adapters.AdapterCategory;
 import org.mycorp.models.CategoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,40 +10,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users/{id_user}/category")
-public class CategoryController {
+public class CategoryController extends Controller<CategoryDao> {
 
-    //final CategoryService categoryService;
-    final Adapter adapterCategory;
+    AdapterCategory adapterCategory;
 
     @Autowired
-    public CategoryController(Adapter adapterCategory) {
-        this.adapterCategory = adapterCategory;
+    public CategoryController(AdapterCategory adapterCategory) {
+        super(adapterCategory);
     }
 
 
+    @Override
     @PostMapping
-    public ResponseEntity<?> createEntity(@PathVariable int id_user, @RequestBody CategoryDao entity) {
-        adapterCategory.createCategory(id_user, entity);
-        return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
-    }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateEntity(@PathVariable int id_user, @RequestBody CategoryDao entity, @PathVariable int id) {
-        final boolean updated = adapterCategory.updateCategory(id, entity);
-
-        return updated
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEntity(@PathVariable int id_user, @PathVariable int id) {
-        final boolean deleted = adapterCategory.deleteCategory(id);
-
-        return deleted
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    public ResponseEntity<?> createEntity(@PathVariable("id_user") int id_user, @RequestBody CategoryDao entity) {
+        return super.createEntity(id_user, entity);
     }
 }

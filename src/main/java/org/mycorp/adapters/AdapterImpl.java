@@ -1,14 +1,12 @@
 package org.mycorp.adapters;
 
-import org.mycorp.models.CategoryDao;
-import org.mycorp.models.UserDao;
 import org.mycorp.repository.RepositoryInterface;
-import org.mycorp.repository.RepositoryUser;
-import org.mycorp.services.CategoryService;
 import org.mycorp.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+
 
 public abstract class AdapterImpl<C, T> implements Adapter<T> {
 
@@ -26,10 +24,15 @@ public abstract class AdapterImpl<C, T> implements Adapter<T> {
     abstract T setParentEntity(T entity, C parentEntity);
 
     @Override
-    public void createEntity(int idParentEntity, T entity) {
+    public boolean createEntity(int idParentEntity, T entity) {
         Optional<C> parentEntity = repository.findById(idParentEntity);
-        T newEntity = setParentEntity(entity, parentEntity.get());
-        service.create(newEntity);
+        if(parentEntity.isPresent()) {
+            T newEntity = setParentEntity(entity, parentEntity.get());
+            service.create(newEntity);
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

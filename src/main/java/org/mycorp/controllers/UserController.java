@@ -1,7 +1,7 @@
 package org.mycorp.controllers;
 
+import org.mycorp.adapters.AdapterUser;
 import org.mycorp.models.UserDao;
-import org.mycorp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,34 +9,31 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
-public class UserController extends Controller<UserDao>{
+public class UserController{
 
-    private final UserService userService;
+    final AdapterUser adapterUser;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(AdapterUser adapterUser) {
+        this.adapterUser = adapterUser;
     }
 
-
-    @Override
+    @PostMapping
     public ResponseEntity<?> createEntity(@RequestBody UserDao entity) {
-        userService.registration(entity);
+        adapterUser.registration(entity);
         return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
     }
 
-    @Override
     public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody UserDao entity) {
-        final boolean updated = userService.update(entity, id);
+        final boolean updated = adapterUser.updateUser(id, entity);
 
         return updated
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @Override
     public ResponseEntity<?> deleteEntity(@PathVariable int id) {
-        final boolean deleted = userService.delete(id);
+        final boolean deleted = adapterUser.deleteUser(id);
 
         return deleted
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -45,7 +42,7 @@ public class UserController extends Controller<UserDao>{
 
     @GetMapping
     public ResponseEntity<UserDao> Authorisation(@RequestBody UserDao userToAuth) {
-        final UserDao user = userService.authorisation(userToAuth);
+        final UserDao user = adapterUser.getUser(userToAuth);
 
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)

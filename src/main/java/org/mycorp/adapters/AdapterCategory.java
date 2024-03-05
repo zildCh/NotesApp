@@ -23,4 +23,5 @@ public class AdapterCategory extends AdapterImpl<UserDao, CategoryDao>{
         entity.setUserDao(parentEntity);
         return entity;
     }
+
 }

@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
-
 public abstract class Controller<T extends AbstractEntity> {
 
     final Adapter<T> adapter;
@@ -27,7 +25,7 @@ public abstract class Controller<T extends AbstractEntity> {
     };
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody T entity){
+    public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody T entity, @PathVariable(required = false) int nested_id){
         final boolean updated = adapter.updateEntity(id, entity);
 
         return updated

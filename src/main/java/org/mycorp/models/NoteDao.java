@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class NoteDao extends AbstractEntity {
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY) //
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_category")
     private CategoryDao category;
     @Column(name = "note")

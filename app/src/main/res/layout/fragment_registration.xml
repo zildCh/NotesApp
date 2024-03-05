@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Base.Theme.NotesApp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/main_background"
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/RegistrationTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/registration_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <RelativeLayout
+        android:layout_width="125dp"
+        android:layout_height="60dp" >
+
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/LoginTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_title"
+            android:fontFamily="@font/font"
+            android:gravity="center|start"
+            android:paddingEnd="5dp"
+            android:paddingStart="21dp"
+            android:paddingBottom="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    </RelativeLayout>
+
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/registrationLoginEditText"
+        style="@style/Base.Theme.NotesApp.CommonItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -22,6 +42,7 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/registrationPasswordEditText"
+        style="@style/Base.Theme.NotesApp.CommonItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -29,6 +50,7 @@
 
     <Button
         android:id="@+id/registrationButton"
+        style="@style/Base.Theme.NotesApp.CommonButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -37,9 +59,9 @@
 
     <Button
         android:id="@+id/goToLoginButton"
+        style="@style/Base.Theme.NotesApp.CommonButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="@string/login_button" />
-
+        android:text="@string/to_login_button" />
 </LinearLayout>

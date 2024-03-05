@@ -61,9 +61,11 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
             adapter.update(it)
         }
 
+        binding.notesRecyclerView.isEnabled = false
+
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.simple_spinner_item,
+            com.github.zottaa.R.layout.my_spinner_item,
             mutableListOf<CategoryUi>()
         )
 

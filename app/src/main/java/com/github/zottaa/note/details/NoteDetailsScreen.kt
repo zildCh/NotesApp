@@ -13,7 +13,7 @@ data class NoteDetailsScreen(
                 containerId,
                 NoteDetailsFragment(noteId, currentCategoryId)
             )
-            .addToBackStack(NoteDetailsFragment.Companion::class.java.name)
+            .addToBackStack(NoteDetailsFragment::class.java.name)
             .commit()
     }
 }

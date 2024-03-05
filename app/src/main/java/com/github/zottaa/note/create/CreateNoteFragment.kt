@@ -52,7 +52,7 @@ class CreateNoteFragment(private var currentCategoryId: Long = -1) :
 
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.simple_spinner_item,
+            com.github.zottaa.R.layout.my_spinner_item,
             mutableListOf<CategoryUi>()
         )
 

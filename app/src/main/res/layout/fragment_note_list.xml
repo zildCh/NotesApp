@@ -3,31 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/notesRootLayout"
     android:layout_width="match_parent"
+    android:background="@drawable/main_background"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/notesTitleTextView"
+    <RelativeLayout
+        android:id="@+id/notesTitle"
+        android:layout_width="125dp"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Title"
-        android:text="@string/list_title" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/LoginTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_title"
+            android:fontFamily="@font/font"
+            android:gravity="center|start"
+            android:paddingEnd="5dp"
+            android:paddingStart="21dp"
+            android:paddingBottom="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    </RelativeLayout>
 
     <Spinner
         android:id="@+id/categorySpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="8dp"
-        android:layout_width="match_parent"
+        style="@style/Widget.Material3.PopupMenu"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/notesTitleTextView"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/font"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/notesTitle"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notesRecyclerView"
         android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@id/categorySpinner"
@@ -40,7 +62,10 @@
         android:layout_margin="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Base.Theme.NotesApp.CommonItem"
         app:layout_constraintRight_toRightOf="parent"
         android:contentDescription="@string/content_description_add" />
 

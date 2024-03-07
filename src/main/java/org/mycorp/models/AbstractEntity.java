@@ -2,10 +2,7 @@ package org.mycorp.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 @MappedSuperclass
 public class AbstractEntity {
@@ -13,6 +10,7 @@ public class AbstractEntity {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
     private int id;
 
     protected AbstractEntity(int id){
@@ -26,7 +24,7 @@ public class AbstractEntity {
     }
 
     public void setId(int id) {
-        this.id = id;
+            this.id = id;
     }
 
 }

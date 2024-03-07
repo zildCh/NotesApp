@@ -59,11 +59,19 @@ public class UserCategoryLink extends AbstractEntity{
         return category;
     }
 
+    public List<Note> getNoteList() {
+        return noteList;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void setNoteList(List<Note> noteList) {
+        this.noteList = noteList;
     }
 }

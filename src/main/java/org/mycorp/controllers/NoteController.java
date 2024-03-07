@@ -21,7 +21,7 @@ public class NoteController{
 
 
     @PostMapping
-    public ResponseEntity<?> createEntity(@PathVariable("id_user") int id_user, @PathVariable("id_category") int id_category, Note entity) {
+    public ResponseEntity<?> createEntity(@PathVariable("id_user") int id_user, @PathVariable("id_category") int id_category, @RequestBody Note entity) {
         boolean created = adapterNote.createNote(id_user, id_category, entity);
 
         return created
@@ -30,7 +30,7 @@ public class NoteController{
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateEntity(@PathVariable("id_user") int id_user, @PathVariable("id_category") int id_category, @PathVariable int id, Note entity) {
+    public ResponseEntity<?> updateEntity(@PathVariable("id_user") int id_user, @PathVariable("id_category") int id_category, @PathVariable int id, @RequestBody Note entity) {
         boolean updated = adapterNote.updateNote(id_user, id_category, id, entity);
 
         return updated

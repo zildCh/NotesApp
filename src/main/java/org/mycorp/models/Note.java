@@ -1,11 +1,13 @@
 package org.mycorp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 @Entity
 @Table (name = "notes")
 public class Note extends AbstractEntity {
 
-    //@JsonIgnore
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_link")
     private UserCategoryLink link;

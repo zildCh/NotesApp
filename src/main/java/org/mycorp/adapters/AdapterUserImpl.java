@@ -28,7 +28,7 @@ public class AdapterUserImpl implements AdapterUser {
     @Override
     public void registration(User user) {
         List<UserCategoryLink> linkList = new ArrayList<>();
-        for(int i=10; i<16; i++){
+        for(int i=1; i<6; i++){
             linkList.add(new UserCategoryLink(user,categoryService.read(i)));
         }
         user.setUserCategoryLinkList(linkList);

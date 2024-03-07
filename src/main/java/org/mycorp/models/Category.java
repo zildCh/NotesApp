@@ -28,6 +28,11 @@ public class Category extends AbstractEntity{
         this.userCategoryLinkList = new ArrayList<UserCategoryLink>();
     }
 
+    public Category(String category) {
+        this.category = category;
+        this.userCategoryLinkList = new ArrayList<UserCategoryLink>();
+    }
+
     public void addLink(UserCategoryLink link) {
         link.setCategory(this);
         userCategoryLinkList.add(link);

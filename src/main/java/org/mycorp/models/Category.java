@@ -9,58 +9,48 @@ import java.util.List;
 
 @Entity
 @Table (name = "category")
-public class CategoryDao extends AbstractEntity{
+public class Category extends AbstractEntity{
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY) //
-    @JoinColumn(name = "id_user")
-    private UserDao user;
     @Column(name = "category")
     private String category;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
-    private List<NoteDao> noteDaoList;
+    private List<UserCategoryLink> userCategoryLinkList;
 
-    public CategoryDao() {
+    public Category() {
     }
 
-    public CategoryDao(int id, UserDao user, String category) {
+    public Category(int id, String category) {
         super(id);
-        this.user = user;
         this.category = category;
-        this.noteDaoList = new ArrayList<NoteDao>();
+        this.userCategoryLinkList = new ArrayList<UserCategoryLink>();
     }
 
-    public void addNote(NoteDao note) {
-        note.setCategory(this);
-        noteDaoList.add(note);
+    public void addLink(UserCategoryLink link) {
+        link.setCategory(this);
+        userCategoryLinkList.add(link);
     }
-    public void removeCategory(NoteDao note) {
-        noteDaoList.remove(note);
+    public void removeLink(UserCategoryLink link) {
+        userCategoryLinkList.remove(link);
     }
 
-    public UserDao getUser() {
-        return user;
-    }
 
     public String getCategory() {
         return category;
     }
 
-    public List<NoteDao> getNoteDaoList() {
-        return noteDaoList;
-    }
-
-    public void setUserDao(UserDao user) {
-        this.user = user;
+    public List<UserCategoryLink> getUserCategoryLinkList() {
+        return userCategoryLinkList;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
 
-    public void setNoteDaoList(List<NoteDao> noteDaoList) {
-        this.noteDaoList = noteDaoList;
+    public void setUserCategoryLinkList(List<UserCategoryLink> userCategoryLinkList) {
+        this.userCategoryLinkList = userCategoryLinkList;
     }
 
     @Override

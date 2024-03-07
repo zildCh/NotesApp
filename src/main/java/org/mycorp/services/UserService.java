@@ -1,12 +1,13 @@
 package org.mycorp.services;
 
-import org.mycorp.models.UserDao;
+import org.mycorp.models.User;
+import org.mycorp.models.UserCategoryLink;
 import org.mycorp.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService extends ServiceImpl<UserDao>{
+public class UserService extends ServiceImpl<User>{
 
     final AuthService authService;
 
@@ -17,56 +18,38 @@ public class UserService extends ServiceImpl<UserDao>{
     }
 
     @Override
-    protected UserDao updateDao(UserDao newDao, UserDao daoToUpdate) {
-        daoToUpdate.setNickname(newDao.getNickname());
-        daoToUpdate.setPassword(authService.passwordEncoding(newDao.getPassword()));
-        return daoToUpdate;
+    protected User updateDao(User newEntity, User entityToUpdate) {
+        entityToUpdate.setNickname(newEntity.getNickname());
+        entityToUpdate.setPassword(authService.passwordEncoding(newEntity.getPassword()));
+        return entityToUpdate;
     }
 
     @Override
-    public void create(UserDao daoObj){
-        authService.passwordEncoding(daoObj.getPassword());
-        super.create(daoObj);
+    public void create(User entity){
+        entity.setPassword(authService.passwordEncoding(entity.getPassword()));
+        super.create(entity);
     };
 
     @Override
-    public UserDao read(int id){
-        UserDao findUser = super.read(id);
+    public User read(int id){
+        User findUser = super.read(id);
         findUser.setNickname(null);
         findUser.setPassword(null);
         return findUser;
     }
 
-    public UserDao authorisation(UserDao user){
-        UserDao findUser = ((RepositoryUser) repository).findByNickname(user.getNickname());
-        UserDao authorizedUser=authService.authorisation(user,findUser);
+    public User authorisation(User user){
+        User findUser = ((RepositoryUser) repository).findByNickname(user.getNickname());
+        User authorizedUser=authService.authentication(user,findUser);
         if(authorizedUser == null)
             return null;
         else{
             authorizedUser.setNickname(null);
             authorizedUser.setPassword(null);
+            for (UserCategoryLink link : authorizedUser.getUserCategoryLinkList()){
+                link.setId(0);
+            }
             return authorizedUser;
         }
     };
-
-
-   /* public void registration(UserDao user) {
-        user.setPassword(passwordEncoding(user.getPassword()));
-        create(user);
-    }
-
-    public UserDao authorisation(UserDao user){
-        UserDao findUser = ((RepositoryUser) repository).findByNickname(user.getNickname());
-        if(passwordEncoder.matches(user.getPassword(), findUser.getPassword())){
-            findUser.setNickname(null);
-            findUser.setPassword(null);
-            return findUser;
-        }
-        else
-            return null;
-    }
-
-    private String passwordEncoding(String password){
-        return passwordEncoder.encode(password);
-    }*/
 }

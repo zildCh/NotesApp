@@ -1,11 +1,11 @@
 package org.mycorp.adapters;
 
-import org.mycorp.models.UserDao;
+import org.mycorp.models.User;
 
 public interface AdapterUser {
-    void registration(UserDao userToReg);
-    boolean updateUser(int id, UserDao userToUpdate);
+    void registration(User userToReg);
+    boolean updateUser(int id, User userToUpdate);
     boolean deleteUser(int id);
-    UserDao authorisation(UserDao userToAuth);
-    UserDao getUser(int id);
+    User authorisation(User userToAuth);
+    User getUser(int id);
 }

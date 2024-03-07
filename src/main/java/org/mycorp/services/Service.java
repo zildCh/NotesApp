@@ -1,58 +1,55 @@
 package org.mycorp.services;
 
-import org.mycorp.models.UserDao;
+import org.mycorp.models.AbstractEntity;
 import org.mycorp.repository.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public interface Service<T> {
+public interface Service<T extends AbstractEntity> {
 
-    void create(T daoObj);
+    void create(T entity);
     List<T> readAll();
     T read(int id);
-    boolean update(T daoObj, int id);
+    boolean update(T entity, int id);
     boolean delete(int id);
 }
 
+abstract class ServiceImpl<T extends AbstractEntity> implements Service<T>{
 
-
-abstract class ServiceImpl<T> implements Service<T>{
-
-    RepositoryInterface<T> repository;
+    final RepositoryInterface<T> repository;
 
     @Autowired
     ServiceImpl(RepositoryInterface<T> rep){
         this.repository=rep;
     };
 
-    abstract protected T updateDao(T newDao, T daoToUpdate);
+    abstract protected T updateDao(T newEntity, T entityToUpdate);
 
     @Override
-    public void create(T daoObj){
-        repository.save(daoObj);
+    public void create(T entity){
+        repository.save(entity);
     };
 
     @Override
     public List<T> readAll(){
-        List<T> allDAOs = repository.findAll();
+        List<T> allEntity = repository.findAll();
         return repository.findAll();
     };
 
     @Override
     public T read(int id){
-        Optional<T> daoObject = repository.findById(id);
-        return daoObject.orElse(null);
+        Optional<T> entity = repository.findById(id);
+        return entity.orElse(null);
     };
 
     @Override
-    public boolean update(T newDao, int id){
-        Optional<T> daoToUpdate = repository.findById(id);
-        if (daoToUpdate.isPresent()){
-            T updatedDAO = updateDao(newDao, daoToUpdate.get());
-            repository.save(updatedDAO);
+    public boolean update(T newEntity, int id){
+        Optional<T> entityToUpdate = repository.findById(id);
+        if (entityToUpdate.isPresent()){
+            T updatedEntity = updateDao(newEntity, entityToUpdate.get());
+            repository.save(updatedEntity);
             return true;
         }
         return false;

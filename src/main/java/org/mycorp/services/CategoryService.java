@@ -1,17 +1,12 @@
 package org.mycorp.services;
 
-import org.mycorp.models.CategoryDao;
-import org.mycorp.models.NoteDao;
-import org.mycorp.models.UserDao;
+import org.mycorp.models.Category;
 import org.mycorp.repository.RepositoryCategory;
-import org.mycorp.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class CategoryService extends ServiceImpl<CategoryDao> {
+public class CategoryService extends ServiceImpl<Category> {
 
     @Autowired
     public CategoryService(RepositoryCategory repositoryCategory){
@@ -19,8 +14,8 @@ public class CategoryService extends ServiceImpl<CategoryDao> {
     }
 
     @Override
-    protected CategoryDao updateDao(CategoryDao newDao, CategoryDao daoToUpdate) {
-        daoToUpdate.setCategory(newDao.getCategory());
-        return daoToUpdate;
+    protected Category updateDao(Category newEntity, Category entityToUpdate) {
+        entityToUpdate.setCategory(newEntity.getCategory());
+        return entityToUpdate;
     }
 }

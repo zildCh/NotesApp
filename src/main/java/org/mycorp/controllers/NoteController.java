@@ -1,7 +1,7 @@
 package org.mycorp.controllers;
 
 import org.mycorp.adapters.AdapterNote;
-import org.mycorp.models.NoteDao;
+import org.mycorp.models.Note;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,30 +9,41 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/category/{id_category}/notes")
-public class NoteController extends Controller<NoteDao> {
+@RequestMapping("users/{id_user}/category/{id_category}/notes")
+public class NoteController{
 
-    AdapterNote adapterNote;
-
+    final AdapterNote adapterNote;
 
     @Autowired
-    public NoteController(AdapterNote adapterNote) {
-        super(adapterNote);
+    NoteController(AdapterNote adapterNote){
+        this.adapterNote=adapterNote;
     }
 
-    @Override
+
     @PostMapping
-    public ResponseEntity<?> createEntity(@PathVariable("id_category") int id_category, @RequestBody NoteDao entity) {
-        return super.createEntity(id_category, entity);
+    public ResponseEntity<?> createEntity(@PathVariable("id_user") int id_user, @PathVariable("id_category") int id_category, Note entity) {
+        boolean created = adapterNote.createNote(id_user, id_category, entity);
+
+        return created
+                ? new ResponseEntity<>(HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    @Override
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody NoteDao entity, @PathVariable("id_category") int nested_id){
-        final boolean updated = ((AdapterNote) adapter).updateEntity(id, nested_id, entity);
+    public ResponseEntity<?> updateEntity(@PathVariable("id_user") int id_user, @PathVariable("id_category") int id_category, @PathVariable int id, Note entity) {
+        boolean updated = adapterNote.updateNote(id_user, id_category, id, entity);
 
         return updated
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    };
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEntity(int id) {
+       boolean deleted = adapterNote.deleteNote(id);
+
+       return deleted
+               ? new ResponseEntity<>(HttpStatus.OK)
+               : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
 }

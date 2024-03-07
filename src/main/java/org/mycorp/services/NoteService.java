@@ -1,24 +1,24 @@
 package org.mycorp.services;
 
-import org.mycorp.models.NoteDao;
+import org.mycorp.models.Note;
 import org.mycorp.repository.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NoteService extends ServiceImpl<NoteDao>{
+public class NoteService extends ServiceImpl<Note>{
 
     @Autowired
-    NoteService(RepositoryInterface<NoteDao> rep) {
+    NoteService(RepositoryInterface<Note> rep) {
         super(rep);
     }
 
     @Override
-    protected NoteDao updateDao(NoteDao newDao, NoteDao daoToUpdate) {
-        daoToUpdate.setCategory(newDao.getCategory());
-        daoToUpdate.setNote(newDao.getNote());
-        daoToUpdate.setDate(newDao.getDate());
-        daoToUpdate.setHeader(newDao.getHeader());
-        return daoToUpdate;
+    protected Note updateDao(Note newEntity, Note entityToUpdate) {
+        entityToUpdate.setLink(newEntity.getLink());
+        entityToUpdate.setNote(newEntity.getNote());
+        entityToUpdate.setDate(newEntity.getDate());
+        entityToUpdate.setHeader(newEntity.getHeader());
+        return entityToUpdate;
     }
 }

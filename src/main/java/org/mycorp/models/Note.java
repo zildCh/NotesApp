@@ -1,33 +1,31 @@
 package org.mycorp.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 @Entity
 @Table (name = "notes")
-public class NoteDao extends AbstractEntity {
+public class Note extends AbstractEntity {
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_category")
-    private CategoryDao category;
+    @JoinColumn(name = "id_link")
+    private UserCategoryLink link;
     @Column(name = "note")
     private String note;
     @Column(name = "date")
     private String date;
     @Column(name = "header")
     private String header;
-    public NoteDao(){}
-    public NoteDao(int id, CategoryDao category, String note, String date, String header) {
+    public Note(){}
+    public Note(int id, UserCategoryLink link, String note, String date, String header) {
         super(id);
-        this.category = category;
+        this.link = link;
         this.note = note;
         this.date = date;
         this.header = header;
     }
 
-    public CategoryDao getCategory() {
-        return category;
+    public UserCategoryLink getLink() {
+        return link;
     }
 
     public String getNote() {
@@ -42,8 +40,8 @@ public class NoteDao extends AbstractEntity {
         return header;
     }
 
-    public void setCategory(CategoryDao category) {
-        this.category = category;
+    public void setLink(UserCategoryLink link) {
+        this.link = link;
     }
 
     public void setNote(String note) {

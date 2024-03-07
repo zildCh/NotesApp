@@ -2,7 +2,7 @@ package org.mycorp.tests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mycorp.models.UserDao;
+import org.mycorp.models.User;
 import org.mycorp.repository.RepositoryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 @DataJpaTest
 public class RepositoryUserTest {
 
-    private static UserDao user;
+    private static User user;
 
     @Autowired
     RepositoryUser repositoryUser;
@@ -29,7 +29,7 @@ public class RepositoryUserTest {
         //user = new UserDao("egor", myByteArray);
 
         // Сохраняем пользователя в репозитории
-        UserDao savedUser = repositoryUser.save(user);
+        User savedUser = repositoryUser.save(user);
 
         // Проверяем, что у сохраненного пользователя установлен идентификатор
         assertNotNull(savedUser.getId());

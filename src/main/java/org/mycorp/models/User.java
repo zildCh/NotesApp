@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table (name = "users")
-public class UserDao extends AbstractEntity{
+public class User extends AbstractEntity{
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "nickname")
@@ -24,29 +24,30 @@ public class UserDao extends AbstractEntity{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
-    private List<CategoryDao> categoryDaoList;
+    private List<UserCategoryLink> userCategoryLinkList;
 
-    public UserDao() {
+    public User() {
     }
 
-    public UserDao(int id, String nickname, String password) {
+    public User(int id, String nickname, String password) {
         super(id);
         this.nickname = nickname;
         this.password = password;
-        this.categoryDaoList = new ArrayList<CategoryDao>();
-    }
-    public UserDao(String nickname, String password) {
-        this.nickname = nickname;
-        this.password = password;
-        this.categoryDaoList = new ArrayList<CategoryDao>();
+        this.userCategoryLinkList= new ArrayList<UserCategoryLink>();
     }
 
-    public void addCategory(CategoryDao category) {
-        category.setUserDao(this);
-        categoryDaoList.add(category);
+    public User(String nickname, String password) {
+        this.nickname = nickname;
+        this.password = password;
+        this.userCategoryLinkList= new ArrayList<UserCategoryLink>();
     }
-    public void removeCategory(CategoryDao category) {
-        categoryDaoList.remove(category);
+
+    public void addLink(UserCategoryLink link) {
+        link.setUser(this);
+        userCategoryLinkList.add(link);
+    }
+    public void removeLink(UserCategoryLink link) {
+        userCategoryLinkList.remove(link);
     }
 
     public String getNickname() {
@@ -57,8 +58,8 @@ public class UserDao extends AbstractEntity{
         return password;
     }
 
-    public List<CategoryDao> getCategoryDaoList() {
-        return categoryDaoList;
+    public List<UserCategoryLink> getUserCategoryLinkList() {
+        return userCategoryLinkList;
     }
 
     public void setNickname(String nickname) {
@@ -69,7 +70,7 @@ public class UserDao extends AbstractEntity{
         this.password = password;
     }
 
-    public void setCategoryDaoList(List<CategoryDao> categoryDaoList) {
-        this.categoryDaoList = categoryDaoList;
+    public void setUserCategoryLinkList(List<UserCategoryLink> userCategoryLinkList) {
+        this.userCategoryLinkList = userCategoryLinkList;
     }
 }

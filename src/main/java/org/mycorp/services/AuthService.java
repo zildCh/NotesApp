@@ -1,19 +1,19 @@
 package org.mycorp.services;
-import org.mycorp.models.UserDao;
+import org.mycorp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    BCryptPasswordEncoder passwordEncoder;
+    final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService(BCryptPasswordEncoder passwordEncoder){
         this.passwordEncoder=passwordEncoder;
     }
 
-    public UserDao authorisation(UserDao user, UserDao findUser){
+    public User authentication(User user, User findUser){
         if(passwordEncoder.matches(user.getPassword(), findUser.getPassword())){
             return findUser;
         }

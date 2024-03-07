@@ -1,7 +1,7 @@
 package org.mycorp.controllers;
 
 import org.mycorp.adapters.AdapterUser;
-import org.mycorp.models.UserDao;
+import org.mycorp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +19,12 @@ public class UserController{
     }
 
     @PostMapping
-    public ResponseEntity<?> createEntity(@RequestBody UserDao entity) {
+    public ResponseEntity<?> createEntity(@RequestBody User entity) {
         adapterUser.registration(entity);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody UserDao entity) {
+    public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody User entity) {
         final boolean updated = adapterUser.updateUser(id, entity);
 
         return updated
@@ -41,8 +41,8 @@ public class UserController{
     }
 
     @GetMapping
-    public ResponseEntity<UserDao> authorisation(@RequestBody UserDao userToAuth) {
-        final UserDao user = adapterUser.authorisation(userToAuth);
+    public ResponseEntity<User> authorisation(@RequestBody User userToAuth) {
+        final User user = adapterUser.authorisation(userToAuth);
 
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
@@ -50,8 +50,8 @@ public class UserController{
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDao> readUser(@PathVariable int id) {
-        final UserDao user = adapterUser.getUser(id);
+    public ResponseEntity<User> readUser(@PathVariable int id) {
+        final User user = adapterUser.getUser(id);
 
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)

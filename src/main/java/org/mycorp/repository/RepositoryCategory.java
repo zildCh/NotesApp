@@ -1,9 +1,8 @@
 package org.mycorp.repository;
 
-import org.mycorp.models.CategoryDao;
-import org.mycorp.models.UserDao;
+import org.mycorp.models.Category;
 import org.springframework.stereotype.Repository;
 @Repository
-public interface RepositoryCategory extends RepositoryInterface<CategoryDao>{
+public interface RepositoryCategory extends RepositoryInterface<Category>{
 
 }

@@ -1,7 +1,6 @@
 package org.mycorp.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

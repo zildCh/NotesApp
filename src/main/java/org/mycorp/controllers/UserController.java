@@ -40,7 +40,7 @@ public class UserController{
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping
+    @PatchMapping
     public ResponseEntity<User> authorisation(@RequestBody User userToAuth) {
         final User user = adapterUser.authorisation(userToAuth);
 

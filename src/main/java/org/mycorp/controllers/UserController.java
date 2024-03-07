@@ -20,8 +20,10 @@ public class UserController{
 
     @PostMapping
     public ResponseEntity<?> createEntity(@RequestBody User entity) {
-        adapterUser.registration(entity);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        boolean created = adapterUser.registration(entity);
+        return created
+                   ? new ResponseEntity<>(HttpStatus.CREATED)
+                   : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<?> updateEntity(@PathVariable int id, @RequestBody User entity) {
@@ -46,7 +48,7 @@ public class UserController{
 
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/{id}")

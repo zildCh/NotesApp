@@ -26,6 +26,9 @@ public class UserService extends ServiceImpl<User>{
 
     @Override
     public void create(User entity){
+        User findUser = findUserByNickname(entity.getNickname());
+        if(findUser!=null)
+            throw new RuntimeException("Duplicate nickname");
         entity.setPassword(authService.passwordEncoding(entity.getPassword()));
         super.create(entity);
     };
@@ -39,17 +42,26 @@ public class UserService extends ServiceImpl<User>{
     }
 
     public User authorisation(User user){
-        User findUser = ((RepositoryUser) repository).findByNickname(user.getNickname());
-        User authorizedUser=authService.authentication(user,findUser);
-        if(authorizedUser == null)
+        User findUser = findUserByNickname(user.getNickname());
+        if(findUser==null)
             return null;
+
+        User authorizedUser=authService.authentication(user, findUser);
+        if(authorizedUser==null)
+            return null;
+
         else{
             authorizedUser.setNickname(null);
             authorizedUser.setPassword(null);
-            for (UserCategoryLink link : authorizedUser.getUserCategoryLinkList()){
+
+            for (UserCategoryLink link : authorizedUser.getUserCategoryLinkList())
                 link.setId(0);
-            }
+
             return authorizedUser;
         }
     };
+
+    private User findUserByNickname(String nickname){
+        return ((RepositoryUser) repository).findByNickname(nickname);
+    }
 }

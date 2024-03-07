@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AdapterNoteImpl implements AdapterNote{
-
     final UserCategoryLinkService userCategoryLinkService;
     final NoteService noteService;
 
@@ -23,7 +22,7 @@ public class AdapterNoteImpl implements AdapterNote{
     public boolean createNote(int id_user, int id_category, Note note) {
         UserCategoryLink link = userCategoryLinkService.findLink(id_user, id_category);
 
-        if(link==null)
+        if (link == null)
             return false;
 
         note.setLink(link);
@@ -43,7 +42,12 @@ public class AdapterNoteImpl implements AdapterNote{
     }
 
     @Override
-    public boolean deleteNote(int id) {
+    public boolean deleteNote(int id_user, int id_category, int id) {
+        UserCategoryLink link = userCategoryLinkService.findLink(id_user, id_category);
+
+        if(link==null)
+            return false;
+
         return noteService.delete(id);
     }
 }

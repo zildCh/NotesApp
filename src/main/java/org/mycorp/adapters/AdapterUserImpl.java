@@ -26,18 +26,29 @@ public class AdapterUserImpl implements AdapterUser {
 
 
     @Override
-    public void registration(User user) {
-        List<UserCategoryLink> linkList = new ArrayList<>();
-        for(int i=1; i<6; i++){
-            linkList.add(new UserCategoryLink(user,categoryService.read(i)));
+    public boolean registration(User user) {
+        try {
+            List<UserCategoryLink> linkList = new ArrayList<>();
+
+            for (int i = 1; i < 6; i++) {
+                linkList.add(new UserCategoryLink(user, categoryService.read(i)));
+            }
+
+            user.setUserCategoryLinkList(linkList);
+            service.create(user);
+            return true;
+        }catch (RuntimeException e){
+            return false;
         }
-        user.setUserCategoryLinkList(linkList);
-        service.create(user);
     }
 
     @Override
     public boolean updateUser(int id, User userToUpdate) {
-        return service.update(userToUpdate, id);
+        try {
+            return service.update(userToUpdate, id);
+        }catch (RuntimeException e){
+            return false;
+        }
     }
 
     @Override

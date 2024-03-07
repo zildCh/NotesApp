@@ -14,11 +14,11 @@ public class Note extends AbstractEntity {
     @Column(name = "note")
     private String note;
     @Column(name = "date")
-    private String date;
+    private Long date;
     @Column(name = "header")
     private String header;
     public Note(){}
-    public Note(int id, UserCategoryLink link, String note, String date, String header) {
+    public Note(int id, UserCategoryLink link, String note, Long date, String header) {
         super(id);
         this.link = link;
         this.note = note;
@@ -34,7 +34,7 @@ public class Note extends AbstractEntity {
         return note;
     }
 
-    public String getDate() {
+    public Long getDate() {
         return date;
     }
 
@@ -50,7 +50,7 @@ public class Note extends AbstractEntity {
         this.note = note;
     }
 
-    public void setDate(String date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

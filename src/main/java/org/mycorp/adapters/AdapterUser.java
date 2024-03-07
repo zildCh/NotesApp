@@ -3,7 +3,7 @@ package org.mycorp.adapters;
 import org.mycorp.models.User;
 
 public interface AdapterUser {
-    void registration(User userToReg);
+    boolean registration(User userToReg);
     boolean updateUser(int id, User userToUpdate);
     boolean deleteUser(int id);
     User authorisation(User userToAuth);

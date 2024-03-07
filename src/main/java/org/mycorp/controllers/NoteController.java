@@ -25,7 +25,7 @@ public class NoteController{
         boolean created = adapterNote.createNote(id_user, id_category, entity);
 
         return created
-                ? new ResponseEntity<>(HttpStatus.CREATED)
+                ? new ResponseEntity<>(entity.getId(), HttpStatus.CREATED)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -39,8 +39,8 @@ public class NoteController{
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEntity(int id) {
-       boolean deleted = adapterNote.deleteNote(id);
+    public ResponseEntity<?> deleteEntity(@PathVariable("id_user") int id_user, @PathVariable("id_category") int id_category, @PathVariable int id) {
+       boolean deleted = adapterNote.deleteNote(id_user, id_category, id);
 
        return deleted
                ? new ResponseEntity<>(HttpStatus.OK)

@@ -69,4 +69,30 @@
         app:layout_constraintRight_toRightOf="parent"
         android:contentDescription="@string/content_description_add" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/logoutButton"
+        android:src="@drawable/logout"
+        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Base.Theme.NotesApp.CommonItem"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:contentDescription="@string/content_description_logout" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/syncButton"
+        android:src="@drawable/sync"
+        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:tint="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Base.Theme.NotesApp.CommonItem"
+        app:layout_constraintRight_toRightOf="parent"
+        android:contentDescription="@string/content_description_sync" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

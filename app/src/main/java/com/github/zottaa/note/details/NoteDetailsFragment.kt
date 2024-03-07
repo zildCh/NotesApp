@@ -74,7 +74,7 @@ class NoteDetailsFragment(
                         noteId,
                         binding.noteTitleEditText.text.toString(),
                         binding.noteTextEditText.text.toString(),
-                        (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id,
+                        (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id(),
                         currentCategoryId
                     )
                 }
@@ -116,7 +116,7 @@ class NoteDetailsFragment(
                         noteId,
                         binding.noteTitleEditText.text.toString(),
                         binding.noteTextEditText.text.toString(),
-                        (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id,
+                        (binding.noteDetailCategorySpinner.selectedItem as CategoryUi).id(),
                         currentCategoryId
                     )
                 }

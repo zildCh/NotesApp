@@ -14,13 +14,27 @@ interface NotesRepository {
         suspend fun notes(): List<Note>
     }
 
+    interface CreateFromServer {
+        suspend fun createNote(
+            id: Long,
+            title: String,
+            text: String,
+            updateTime: Long,
+            categoryId: Long
+        )
+
+        suspend fun deleteAll()
+    }
+
     interface Edit {
         suspend fun deleteNote(id: Long)
         suspend fun updateNote(id: Long, title: String = "", text: String = "", categoryId: Long)
         suspend fun note(noteId: Long): Note
     }
 
-    interface All : Create, ReadList, Edit
+    interface Synchronize : CreateFromServer, ReadList
+
+    interface All : Create, Edit, Synchronize
 
     class Base(
         private val now: Now,
@@ -32,8 +46,22 @@ interface NotesRepository {
             return id
         }
 
+        override suspend fun createNote(
+            id: Long,
+            title: String,
+            text: String,
+            updateTime: Long,
+            categoryId: Long
+        ) {
+            dao.insert(NoteCache(id, title, text, updateTime, categoryId))
+        }
+
         override suspend fun notes(): List<Note> =
             dao.notes().map { Note(it.id, it.title, it.text, it.updateTime, it.categoryId) }
+
+        override suspend fun deleteAll() {
+            dao.deleteAll()
+        }
 
 
         override suspend fun deleteNote(id: Long) {

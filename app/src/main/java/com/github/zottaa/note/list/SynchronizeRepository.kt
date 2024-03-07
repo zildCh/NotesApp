@@ -1,21 +1,18 @@
-package com.github.zottaa.authorization.login
+package com.github.zottaa.note.list
 
-import com.github.zottaa.authorization.UserCredits
 import com.github.zottaa.core.UserNotesResult
 import retrofit2.HttpException
-import retrofit2.await
-import java.lang.IllegalStateException
 import java.net.UnknownHostException
 
-interface LoginRepository {
-    suspend fun login(nickname: String, password: String): UserNotesResult
+interface SynchronizeRepository {
+    suspend fun synchronize(userId: Long): UserNotesResult
 
     class Base(
-        private val service: LoginService
-    ) : LoginRepository {
-        override suspend fun login(nickname: String, password: String): UserNotesResult {
+        private val service: SynchronizeService
+    ) : SynchronizeRepository {
+        override suspend fun synchronize(userId: Long): UserNotesResult {
             return try {
-                val response = service.login(UserCredits(nickname, password))
+                val response = service.synchronize(userId.toString())
                 UserNotesResult.Success(response)
             } catch (e: HttpException) {
                 UserNotesResult.Error(false)

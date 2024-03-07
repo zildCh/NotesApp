@@ -30,7 +30,7 @@ data class NoteUi(
         var category: CategoryUi
         for (i in 0 until adapter.count) {
             category = adapter.getItem(i) as CategoryUi
-            if (category.id == categoryId) {
+            if (category.id() == categoryId) {
                 spinner.setSelection(i)
             }
         }

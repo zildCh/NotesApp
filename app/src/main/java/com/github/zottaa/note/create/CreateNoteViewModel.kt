@@ -46,7 +46,7 @@ class CreateNoteViewModel(
         viewModelScope.launch(dispatcher) {
             val id = repository.createNote(title, categoryId)
             withContext(dispatcherMain) {
-                if (categoryId == currentCategoryId || currentCategoryId == NO_CATEGORY)
+                if (categoryId == currentCategoryId || currentCategoryId == ALL_CATEGORY)
                     addLiveDataWrapper.create(
                         NoteUi(
                             id,
@@ -68,6 +68,6 @@ class CreateNoteViewModel(
 
     companion object {
         private const val DEFAULT_TEXT = ""
-        private const val NO_CATEGORY = 1L
+        private const val ALL_CATEGORY = 0L
     }
 }

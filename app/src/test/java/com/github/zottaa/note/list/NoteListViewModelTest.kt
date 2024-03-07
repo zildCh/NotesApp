@@ -32,7 +32,7 @@ class NoteListViewModelTest {
         noteLiveDataWrapper = FakeNoteUpdateLiveDataWrapper.Base(order)
         navigation = FakeNavigation.Base(order)
         viewModel = NoteListViewModel(
-            repository = repository,
+            notesRepository = repository,
             listLiveDataWrapper = liveDataWrapper,
             noteLiveDataWrapper = noteLiveDataWrapper,
             navigation = navigation,

@@ -36,6 +36,11 @@ class LoginFragment : AbstractFragment<FragmentLoginBinding>() {
         }
 
         viewModel.init()
+
+        if (savedInstanceState != null) {
+            binding.loginEditText.setText(savedInstanceState.getString(LOGIN_KEY))
+            binding.passwordEditText.setText(savedInstanceState.getString(PASSWORD_KEY))
+        }
     }
 
 
@@ -44,5 +49,16 @@ class LoginFragment : AbstractFragment<FragmentLoginBinding>() {
             binding.loginButton.isEnabled = binding.loginEditText.text.toString()
                 .isNotEmpty() && binding.passwordEditText.text.toString().isNotEmpty()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(LOGIN_KEY, binding.loginEditText.text.toString())
+        outState.putString(PASSWORD_KEY, binding.passwordEditText.text.toString())
+    }
+
+    companion object {
+        private const val LOGIN_KEY = "loginKey"
+        private const val PASSWORD_KEY = "passwordKey"
     }
 }

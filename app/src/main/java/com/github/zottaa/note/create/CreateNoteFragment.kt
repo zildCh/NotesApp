@@ -45,7 +45,7 @@ class CreateNoteFragment(private var currentCategoryId: Long = -1) :
             hideKeyboard()
             viewModel.createNote(
                 binding.createNoteEditText.text.toString(),
-                (binding.noteCreateCategorySpinner.selectedItem as CategoryUi).id,
+                (binding.noteCreateCategorySpinner.selectedItem as CategoryUi).id(),
                 currentCategoryId
             )
         }

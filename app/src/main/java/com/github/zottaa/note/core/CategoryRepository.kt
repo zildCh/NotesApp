@@ -36,5 +36,5 @@ data class Category(
     private val name: String
 ) {
     fun toUi(): CategoryUi =
-        CategoryUi(id, name)
+        CategoryUi.Base(id, name)
 }

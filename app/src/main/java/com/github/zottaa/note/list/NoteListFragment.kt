@@ -1,6 +1,5 @@
 package com.github.zottaa.note.list
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +25,7 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
                 override fun noteDetails(noteUi: NoteUi) {
                     viewModel.noteDetails(
                         noteUi,
-                        (binding.categorySpinner.selectedItem as CategoryUi).id
+                        (binding.categorySpinner.selectedItem as CategoryUi).id()
                     )
                 }
             },
@@ -35,7 +34,7 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
                     var category: CategoryUi
                     for (i in 0 until binding.categorySpinner.adapter.count) {
                         category = binding.categorySpinner.adapter.getItem(i) as CategoryUi
-                        if (noteUi.isCategoryIdTheSame(category.id)) {
+                        if (noteUi.isCategoryIdTheSame(category.id())) {
                             textView.text = category.toString()
                             break
                         }
@@ -54,7 +53,11 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
         )
 
         binding.addButton.setOnClickListener {
-            viewModel.addNote((binding.categorySpinner.selectedItem as CategoryUi).id)
+            viewModel.addNote((binding.categorySpinner.selectedItem as CategoryUi).id())
+        }
+
+        binding.logoutButton.setOnClickListener {
+            viewModel.logout()
         }
 
         viewModel.liveData().observe(viewLifecycleOwner) {
@@ -79,7 +82,7 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
                     id: Long
                 ) {
                     val category = parent?.getItemAtPosition(position) as CategoryUi
-                    viewModel.init(category.id)
+                    viewModel.init(category.id())
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -110,7 +113,7 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
     }
 
     companion object {
-        private const val INITIAL_CATEGORY_ID = 1L
+        private const val INITIAL_CATEGORY_ID = 0L
         private const val NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY = "NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY"
     }
 }

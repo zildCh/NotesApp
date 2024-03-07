@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import com.github.zottaa.authorization.login.LoginFragment
 import com.github.zottaa.core.AbstractFragment
 import com.github.zottaa.core.ProvideViewModel
 import com.github.zottaa.databinding.FragmentRegistrationBinding
@@ -32,10 +33,16 @@ class RegistrationFragment : AbstractFragment<FragmentRegistrationBinding>() {
                 binding.registrationLoginEditText.text.toString(),
                 binding.registrationPasswordEditText.text.toString()
             )
+            hideKeyboard()
         }
 
         binding.goToLoginButton.setOnClickListener {
             viewModel.comeback()
+        }
+
+        if (savedInstanceState != null) {
+            binding.registrationLoginEditText.setText(savedInstanceState.getString(LOGIN_KEY))
+            binding.registrationPasswordEditText.setText(savedInstanceState.getString(PASSWORD_KEY))
         }
     }
 
@@ -44,5 +51,16 @@ class RegistrationFragment : AbstractFragment<FragmentRegistrationBinding>() {
             binding.registrationButton.isEnabled = binding.registrationLoginEditText.text.toString()
                 .isNotEmpty() && binding.registrationPasswordEditText.text.toString().isNotEmpty()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(LOGIN_KEY, binding.registrationLoginEditText.text.toString())
+        outState.putString(PASSWORD_KEY, binding.registrationPasswordEditText.text.toString())
+    }
+
+    companion object {
+        private const val LOGIN_KEY = "loginKey"
+        private const val PASSWORD_KEY = "passwordKey"
     }
 }

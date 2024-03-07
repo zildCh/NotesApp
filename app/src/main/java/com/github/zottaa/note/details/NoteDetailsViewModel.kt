@@ -68,7 +68,7 @@ class NoteDetailsViewModel(
         viewModelScope.launch(dispatcher) {
             repository.updateNote(noteId, newTitle, newText, categoryId)
             withContext(dispatcherMain) {
-                if (categoryId != currentCategory && currentCategory != 1L)
+                if (categoryId != currentCategory && currentCategory != ALL_CATEGORY)
                     noteListLiveDataWrapper.delete(noteId)
                 else
                     noteListLiveDataWrapper.updateOrCreate(
@@ -88,4 +88,8 @@ class NoteDetailsViewModel(
     }
 
     override fun liveData(): LiveData<NoteUi> = noteLiveDataWrapper.liveData()
+
+    companion object {
+        private const val ALL_CATEGORY = 0L
+    }
 }

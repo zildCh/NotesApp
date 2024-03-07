@@ -18,7 +18,9 @@ class App : Application(), ProvideViewModel {
             ProvideViewModel.Base(
                 clear,
                 core.notesDao(),
-                core.categoryDao()
+                core.categoryDao(),
+                core.sharedPreferencesRepository(),
+                core.retrofit()
             )
         )
         super.onCreate()

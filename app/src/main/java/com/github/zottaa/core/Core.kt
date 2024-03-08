@@ -39,7 +39,7 @@ interface Core {
             .build()
 
         private val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.0.106:8080/")
+            .baseUrl("http://5.130.130.194:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

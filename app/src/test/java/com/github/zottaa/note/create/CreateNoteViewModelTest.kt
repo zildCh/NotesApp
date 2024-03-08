@@ -10,7 +10,6 @@ import com.github.zottaa.note.core.FakeNow
 import com.github.zottaa.note.core.NotesRepository
 import com.github.zottaa.note.list.ListLiveDataWrapper
 import com.github.zottaa.note.list.NoteUi
-import com.github.zottaa.note.list.NotesListScreen
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import org.junit.Before
@@ -36,7 +35,7 @@ class CreateNoteViewModelTest {
         now = FakeNow.Base(0)
         viewModel = CreateNoteViewModel(
             addLiveDataWrapper = addLiveDataWrapper,
-            repository = repository,
+            noteRepository = repository,
             navigation = navigation,
             clear = clear,
             dispatcher = Dispatchers.Unconfined,

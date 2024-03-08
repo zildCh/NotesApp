@@ -12,6 +12,8 @@ import com.github.zottaa.main.Navigation
 import com.github.zottaa.note.core.CategoryRepository
 import com.github.zottaa.note.core.NoteLiveDataWrapper
 import com.github.zottaa.note.core.NotesRepository
+import com.github.zottaa.note.core.NotesService
+import com.github.zottaa.note.core.RemoteNotesRepository
 import com.github.zottaa.note.create.CreateNoteViewModel
 import com.github.zottaa.note.details.NoteDetailsViewModel
 import com.github.zottaa.note.list.ListLiveDataWrapper
@@ -67,6 +69,8 @@ interface ProvideViewModel {
             RegistrationRepository.Base(retrofit.create(RegistrationService::class.java))
         private val synchronizeRepository =
             SynchronizeRepository.Base(retrofit.create(SynchronizeService::class.java))
+        private val remoteNoteRepository =
+            RemoteNotesRepository.Base(retrofit.create(NotesService::class.java))
 
         override fun <T : ViewModel> viewModel(clasz: Class<T>): T {
             return when (clasz) {
@@ -75,6 +79,8 @@ interface ProvideViewModel {
                 )
 
                 NoteDetailsViewModel::class.java -> NoteDetailsViewModel(
+                    sharedPreferencesRepository,
+                    remoteNoteRepository,
                     categoryRepository,
                     sharedNoteLiveDataWrapper,
                     sharedNoteListLiveDataWrapper,
@@ -99,6 +105,8 @@ interface ProvideViewModel {
                 )
 
                 CreateNoteViewModel::class.java -> CreateNoteViewModel(
+                    sharedPreferencesRepository,
+                    remoteNoteRepository,
                     categoryRepository,
                     sharedNoteListLiveDataWrapper,
                     notesRepository,

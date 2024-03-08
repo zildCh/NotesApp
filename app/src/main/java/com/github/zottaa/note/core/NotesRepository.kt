@@ -94,4 +94,6 @@ data class Note(
     fun toUi() =
         NoteUi(id, title, text, updateTime, categoryId)
 
+    fun categoryId() = categoryId
+
 }

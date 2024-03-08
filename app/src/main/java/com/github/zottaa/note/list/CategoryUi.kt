@@ -6,7 +6,7 @@ interface CategoryUi {
     fun id(): Long
 
     data class Base(
-        val id: Long,
+        private val id: Long,
         private val name: String
     ) : CategoryUi {
         override fun isValid(note: NoteUi): Boolean = note.isCategoryIdTheSame(id)

@@ -35,17 +35,6 @@ class LoginViewModel(
         viewModelScope.launch(dispatcher) {
             val loginResult = loginRepository.login(login, password)
             if (loginResult.isSuccess()) {
-//                val list = (loginResult as UserNotesResult.Success).notes()
-//                notesRepository.deleteAll()
-//                list.forEach {
-//                    notesRepository.createNote(
-//                        it.id,
-//                        it.title,
-//                        it.text,
-//                        it.updateTime,
-//                        it.categoryId
-//                    )
-//                }
                 sharedPreferencesRepository.setUserId((loginResult as UserNotesResult.Success).userId())
             } else {
                 println((loginResult as UserNotesResult.Error).message())

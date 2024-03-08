@@ -8,6 +8,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table (name = "users")
@@ -72,5 +73,19 @@ public class User extends AbstractEntity{
 
     public void setUserCategoryLinkList(List<UserCategoryLink> userCategoryLinkList) {
         this.userCategoryLinkList = userCategoryLinkList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+        return Objects.equals(getNickname(), user.getNickname()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getUserCategoryLinkList(), user.getUserCategoryLinkList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNickname(), getPassword(), getUserCategoryLinkList());
     }
 }

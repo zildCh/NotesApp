@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+
 @Service
 public class AuthService {
     final BCryptPasswordEncoder passwordEncoder;
@@ -13,7 +15,7 @@ public class AuthService {
         this.passwordEncoder=passwordEncoder;
     }
 
-    public User authentication(User user, User findUser){
+    public User authentication(@NotNull User user, @NotNull User findUser){
         if(passwordEncoder.matches(user.getPassword(), findUser.getPassword())){
             return findUser;
         }

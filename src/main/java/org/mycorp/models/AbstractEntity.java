@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import javax.persistence.*;
 
 @MappedSuperclass
-public class AbstractEntity {
+public abstract class AbstractEntity {
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @Id

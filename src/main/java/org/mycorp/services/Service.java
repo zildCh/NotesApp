@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public interface Service<T extends AbstractEntity> {
 
-    void create(T entity);
+    void create(T entity) throws Exception;
     List<T> readAll();
     T read(int id);
-    boolean update(T entity, int id);
+    boolean update(T entity, int id) throws Exception;
     boolean delete(int id);
 }
 
@@ -25,10 +25,10 @@ abstract class ServiceImpl<T extends AbstractEntity> implements Service<T>{
         this.repository=rep;
     };
 
-    abstract protected T updateDao(T newEntity, T entityToUpdate);
+    abstract protected T updateEntity(T newEntity, T entityToUpdate);
 
     @Override
-    public void create(T entity){
+    public void create(T entity) throws Exception {
         repository.save(entity);
     };
 
@@ -45,10 +45,10 @@ abstract class ServiceImpl<T extends AbstractEntity> implements Service<T>{
     };
 
     @Override
-    public boolean update(T newEntity, int id){
+    public boolean update(T newEntity, int id) throws Exception {
         Optional<T> entityToUpdate = repository.findById(id);
         if (entityToUpdate.isPresent()){
-            T updatedEntity = updateDao(newEntity, entityToUpdate.get());
+            T updatedEntity = updateEntity(newEntity, entityToUpdate.get());
             repository.save(updatedEntity);
             return true;
         }

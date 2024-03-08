@@ -5,6 +5,8 @@ import org.mycorp.repository.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+
 @Service
 public class NoteService extends ServiceImpl<Note>{
 
@@ -14,7 +16,7 @@ public class NoteService extends ServiceImpl<Note>{
     }
 
     @Override
-    protected Note updateDao(Note newEntity, Note entityToUpdate) {
+    protected Note updateEntity(@NotNull Note newEntity, @NotNull Note entityToUpdate) {
         entityToUpdate.setLink(newEntity.getLink());
         entityToUpdate.setNote(newEntity.getNote());
         entityToUpdate.setDate(newEntity.getDate());

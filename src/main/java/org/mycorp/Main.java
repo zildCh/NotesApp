@@ -35,7 +35,13 @@ public class Main{
         staticCategoryPack.add(new Category(5,"Sport"));
         staticCategoryPack.add(new Category(6,"Study"));
 
-        staticCategoryPack.forEach(category -> service.create(category));
+        staticCategoryPack.forEach(category -> {
+            try {
+                service.create(category);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 }

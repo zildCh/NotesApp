@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
         android:tint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         style="@style/Base.Theme.NotesApp.CommonItem"
         app:layout_constraintLeft_toLeftOf="parent"
         android:contentDescription="@string/content_description_logout" />

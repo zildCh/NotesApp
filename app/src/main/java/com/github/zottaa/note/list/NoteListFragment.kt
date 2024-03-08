@@ -95,25 +95,36 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
             spinnerAdapter.addAll(it)
         }
 
+        viewModel.uiStateLiveData.observe(viewLifecycleOwner) {
+            it.show(binding.progressBar)
+        }
+
         viewModel.init(
             INITIAL_CATEGORY_ID
         )
 
-        if (savedInstanceState != null)
+        viewModel.synchronize()
+
+        if (savedInstanceState != null) {
             binding.categorySpinner.post {
                 binding.categorySpinner.setSelection(
                     savedInstanceState.getInt(NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY)
                 )
             }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY, binding.categorySpinner.selectedItemPosition)
+        outState.putInt(
+            NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY,
+            binding.categorySpinner.selectedItemPosition
+        )
     }
 
     companion object {
         private const val INITIAL_CATEGORY_ID = 0L
-        private const val NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY = "NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY"
+        private const val NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY =
+            "NOTE_LIST_CATEGORY_SPINNER_POSITION_KEY"
     }
 }

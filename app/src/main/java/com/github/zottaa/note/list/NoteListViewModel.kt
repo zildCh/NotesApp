@@ -35,7 +35,12 @@ class NoteListViewModel(
         get() = _categoryLiveData
     private val _categoryLiveData: MutableLiveData<List<CategoryUi>> = MutableLiveData()
 
+    val uiStateLiveData: LiveData<UiState>
+        get() = _uiStateLiveData
+    private val _uiStateLiveData: MutableLiveData<UiState> = MutableLiveData()
+
     fun init(categoryId: Long) {
+        _uiStateLiveData.value = UiState.Progress
         viewModelScope.launch(dispatcher) {
             val category =
                 if (categoryId != 0L)
@@ -50,11 +55,13 @@ class NoteListViewModel(
             withContext(dispatcherMain) {
                 listLiveDataWrapper.update(notes)
                 _categoryLiveData.value = categories
+                _uiStateLiveData.postValue(UiState.Main)
             }
         }
     }
 
     fun synchronize() {
+        _uiStateLiveData.value = UiState.Progress
         viewModelScope.launch(dispatcher) {
             val synchronizeResult =
                 synchronizeRepository.synchronize(sharedPreferencesRepository.getUserId())

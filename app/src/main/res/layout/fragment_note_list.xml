@@ -6,6 +6,11 @@
     android:background="@drawable/main_background"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <RelativeLayout
         android:id="@+id/notesTitle"
         android:layout_width="125dp"

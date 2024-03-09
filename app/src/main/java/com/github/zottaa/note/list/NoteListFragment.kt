@@ -64,7 +64,11 @@ class NoteListFragment : AbstractFragment<FragmentNoteListBinding>() {
             adapter.update(it)
         }
 
-        binding.notesRecyclerView.isEnabled = false
+        binding.syncButton.setOnClickListener {
+            viewModel.synchronize()
+        }
+
+
 
         val spinnerAdapter = ArrayAdapter(
             requireContext(),

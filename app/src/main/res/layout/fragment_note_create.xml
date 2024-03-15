@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/createNoteRootLayout"
+    style="@style/Base.Theme.NotesApp"
+    android:background="@drawable/background_with_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clickable="true"/>
+
+    <TextView
+        android:id="@+id/createNoteTextView"
+        style="@style/Base.Theme.NotesApp.CommonItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_margin="8dp"
+        android:text="@string/title_note" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/createNoteEditText"
+        style="@style/Base.Theme.NotesApp.CommonItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="@string/hint_title" />
+
+    <Spinner
+        android:id="@+id/noteCreateCategorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/font"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/createNoteButton"
+        style="@style/Base.Theme.NotesApp.CommonButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/button_create" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clickable="true"/>
+
+</LinearLayout>
